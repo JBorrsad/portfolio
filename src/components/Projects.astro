@@ -5,6 +5,8 @@ import Tailwind from "./icons/Tailwind.astro"
 import Link from "./icons/Link.astro"
 import LinkButton from "./LinkButton.astro"
 
+const baseUrl = import.meta.env.BASE_URL
+
 const TAGS = {
   JAVA: {
     name: "Java",
@@ -39,7 +41,7 @@ const PROJECTS = [
       "Plataforma de comercio electrónico completa desarrollada con Spring Boot, Spring MVC y Hibernate. Incluye gestión de usuarios, carrito de compras, sistema de pagos y panel de administración. Implementa arquitectura limpia y principios SOLID.",
     link: "https://github.com/juan-borras/spring-ecommerce",
     github: "https://github.com/juan-borras/spring-ecommerce",
-    image: "/projects/ecommerce.webp",
+    image: `${baseUrl}projects/ecommerce.webp`,
     tags: [TAGS.JAVA, TAGS.SPRING],
   },
   {
@@ -48,7 +50,7 @@ const PROJECTS = [
       "App móvil multiplataforma para gestión de tareas personales. Incluye sincronización con la nube, notificaciones push, modo offline y geolocalización. Desarrollada con React Native, TypeScript y Firebase.",
     link: "https://github.com/juan-borras/task-app-react-native",
     github: "https://github.com/juan-borras/task-app-react-native",
-    image: "/projects/mobile-app.webp",
+    image: `${baseUrl}projects/mobile-app.webp`,
     tags: [TAGS.REACT, TAGS.TAILWIND],
   },
   {
@@ -57,7 +59,7 @@ const PROJECTS = [
       "Panel de control empresarial desarrollado con Angular 17 y TypeScript. Incluye gestión de usuarios, reportes interactivos, gráficos en tiempo real y sistema de autenticación JWT. Implementa lazy loading y optimización de rendimiento.",
     link: "https://github.com/juan-borras/angular-dashboard",
     github: "https://github.com/juan-borras/angular-dashboard",
-    image: "/projects/dashboard.webp",
+    image: `${baseUrl}projects/dashboard.webp`,
     tags: [TAGS.ANGULAR, TAGS.TAILWIND],
   },
 ]
