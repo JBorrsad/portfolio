@@ -1,0 +1,36 @@
+---
+import ExperienceItem from "./ExperienceItem.astro"
+const EXPERIENCE = [
+  {
+    date: "Marzo 2025 - Junio 2025",
+    title: "Prácticas de Desarrollo de Software",
+    company: "Tracasa Instrumental, Pamplona",
+    description:
+      "Desarrollo de aplicaciones en infraestructura y diseño de software. Aplicación de conocimientos en programación y metodologías de desarrollo ágil. Trabajo en equipo y resolución de problemas técnicos.",
+  },
+  {
+    date: "Septiembre 2023 - Junio 2025",
+    title: "Estudiante de DAM",
+    company: "Centro Integrado María Ana Sanz",
+    description:
+      "Grado Superior en Desarrollo de Aplicaciones Multiplataforma. Especialización en Java, Spring Framework, desarrollo móvil con React Native y Angular. Formación en arquitecturas limpias, Domain Driven Design y microservicios.",
+  },
+  {
+    date: "Septiembre 2015 - Junio 2022",
+    title: "Estudios en Ciencias de la Salud",
+    company: "Universidad Alfonso X el Sabio",
+    description:
+      "Grado en Odontología (200 ECTS). Desarrollo de habilidades analíticas, resolución de problemas complejos y trabajo con tecnologías médicas avanzadas. Base sólida en metodología científica y pensamiento lógico.",
+  },
+]
+---
+
+<ol class="relative mt-16">
+  {
+    EXPERIENCE.map((experience) => (
+      <li class="">
+        <ExperienceItem {...experience} />
+      </li>
+    ))
+  }
+</ol>
