@@ -5,6 +5,8 @@ import AboutMe from "@/components/AboutMe.astro"
 import Briefcase from "@/components/icons/Briefcase.astro"
 import CodeIcon from "@/components/icons/Code.astro"
 import Experience from "@/components/Experience.astro"
+import Education from "@/components/Education.astro"
+import EducationIcon from "@/components/icons/Education.astro"
 import ProfileCheck from "@/components/icons/ProfileCheck.astro"
 import Projects from "@/components/Projects.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
@@ -29,6 +31,14 @@ import TitleSection from "@/components/TitleSection.astro"
         Experiencia laboral
       </TitleSection>
       <Experience />
+    </SectionContainer>
+
+    <SectionContainer id="formacion">
+      <TitleSection>
+        <EducationIcon class="size-8" />
+        Formación
+      </TitleSection>
+      <Education />
     </SectionContainer>
 
     <SectionContainer id="proyectos">
