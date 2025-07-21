@@ -27,9 +27,9 @@ import DownloadPill from "@/components/DownloadPill.astro"
     Hola! soy Juan Borrás
   </h1>
   <div class="typewriter">
-    <div class="typewriter-text text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white">
+    <p class="typewriter-text text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white">
       Developer
-    </div>
+    </p>
   </div>
   <p
     class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
@@ -71,12 +71,14 @@ import DownloadPill from "@/components/DownloadPill.astro"
 
   .typewriter-text {
     font-family: monospace;
+    margin: 0;
     overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid;
     border-color: #374151; /* gray-700 for light mode */
     width: 0;
-    animation: typing 2s steps(9) forwards, blink 1s step-end infinite;
+    max-width: max-content;
+    animation: typing 3.5s steps(9) forwards, blink 1s step-end infinite;
   }
 
   .dark .typewriter-text {
@@ -88,7 +90,7 @@ import DownloadPill from "@/components/DownloadPill.astro"
       width: 0;
     }
     to {
-      width: 100%;
+      width: 9ch; /* 9 caracteres para "Developer" */
     }
   }
 
