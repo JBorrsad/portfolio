@@ -4,6 +4,15 @@ import NextJS from "./icons/NextJS.astro"
 import Tailwind from "./icons/Tailwind.astro"
 import Link from "./icons/Link.astro"
 import LinkButton from "./LinkButton.astro"
+import Java from "./icons/Java.astro"
+import Spring from "./icons/Spring.astro"
+import Angular from "./icons/Angular.astro"
+import ReactNative from "./icons/ReactNative.astro"
+import Kotlin from "./icons/Kotlin.astro"
+import Firebase from "./icons/Firebase.astro"
+import GoogleMaps from "./icons/GoogleMaps.astro"
+import Android from "./icons/Android.astro"
+import Room from "./icons/Room.astro"
 
 
 
@@ -11,22 +20,47 @@ const TAGS = {
   JAVA: {
     name: "Java",
     class: "bg-[#f89820] text-white",
-    icon: NextJS,
+    icon: Java,
   },
   SPRING: {
     name: "Spring Boot",
     class: "bg-[#6db33f] text-white",
-    icon: NextJS,
+    icon: Spring,
   },
   ANGULAR: {
     name: "Angular",
     class: "bg-[#dd0031] text-white",
-    icon: NextJS,
+    icon: Angular,
   },
   REACT: {
     name: "React Native",
     class: "bg-[#61dafb] text-black",
-    icon: NextJS,
+    icon: ReactNative,
+  },
+  KOTLIN: {
+    name: "Kotlin",
+    class: "bg-[#7f52ff] text-white",
+    icon: Kotlin,
+  },
+  FIREBASE: {
+    name: "Firebase",
+    class: "bg-[#ffca28] text-black",
+    icon: Firebase,
+  },
+  MAPS: {
+    name: "Google Maps",
+    class: "bg-[#4285f4] text-white",
+    icon: GoogleMaps,
+  },
+  ANDROID: {
+    name: "Android",
+    class: "bg-[#3ddc84] text-black",
+    icon: Android,
+  },
+  ROOM: {
+    name: "Room DB",
+    class: "bg-[#669df6] text-white",
+    icon: Room,
   },
   TAILWIND: {
     name: "Tailwind CSS",
@@ -35,6 +69,15 @@ const TAGS = {
   },
 }
 const PROJECTS = [
+  {
+    title: "DogTracker - Sistema de Monitorización de Mascotas",
+    description:
+      "Aplicación Android completa para el monitoreo en tiempo real de mascotas. Implementa seguimiento GPS, zonas seguras personalizables con geofencing, notificaciones push instantáneas, gestión de perfiles detallados y historial de ubicaciones. Desarrollada con Kotlin, Material Design 3, Firebase (Realtime Database + Authentication), Google Maps API, Room Database para offline, UCrop para procesamiento de imágenes y sistema de notificaciones avanzado.",
+    link: "https://github.com/JBorrsad/PMDM_DEIN_FINAL",
+    github: "https://github.com/JBorrsad/PMDM_DEIN_FINAL",
+    image: "/portfolio/projects/pawtracker.jpg",
+    tags: [TAGS.KOTLIN, TAGS.ANDROID, TAGS.FIREBASE, TAGS.MAPS, TAGS.ROOM],
+  },
   {
     title: "E-commerce con Spring Boot",
     description:
