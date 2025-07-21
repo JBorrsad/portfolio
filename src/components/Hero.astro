@@ -1,6 +1,6 @@
 ---
 const personalImageAlt = "Juan Borrás Sada"
-import Badge from "@/components/Badge.astro"
+import BadgeStatic from "@/components/BadgeStatic.astro"
 import LinkedInIcon from "@/components/icons/LinkedIn.astro"
 import MailIcon from "@/components/icons/Mail.astro"
 import WhatsAppIcon from "@/components/icons/WhatsApp.astro"
@@ -18,7 +18,7 @@ import DownloadPill from "@/components/DownloadPill.astro"
       alt={personalImageAlt}
     />
     <div class="flex items-center md:justify-center">
-      <Badge>Disponible para trabajar</Badge>
+      <BadgeStatic>Disponible para trabajar</BadgeStatic>
     </div>
   </div>
   <h1
@@ -50,7 +50,7 @@ import DownloadPill from "@/components/DownloadPill.astro"
       <LinkedInIcon class="size-4" />
       Linkedin
     </SocialPill>
-    <DownloadPill href="/portfolio/CV_Juan_Borras.pdf" download>
+    <DownloadPill href="/portfolio/CV_Juan_Borras.pdf" download="CV_Juan_Borras.pdf">
       <DownloadIcon class="size-4" />
       Descargar CV
     </DownloadPill>
