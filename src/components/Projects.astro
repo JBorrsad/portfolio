@@ -19,52 +19,52 @@ import Room from "./icons/Room.astro"
 const TAGS = {
   JAVA: {
     name: "Java",
-    class: "bg-[#f89820] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Java,
   },
   SPRING: {
     name: "Spring Boot",
-    class: "bg-[#6db33f] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Spring,
   },
   ANGULAR: {
     name: "Angular",
-    class: "bg-[#dd0031] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Angular,
   },
   REACT: {
     name: "React Native",
-    class: "bg-[#61dafb] text-black",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: ReactNative,
   },
   KOTLIN: {
     name: "Kotlin",
-    class: "bg-[#7f52ff] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Kotlin,
   },
   FIREBASE: {
     name: "Firebase",
-    class: "bg-[#ffca28] text-black",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Firebase,
   },
   MAPS: {
     name: "Google Maps",
-    class: "bg-[#4285f4] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: GoogleMaps,
   },
   ANDROID: {
     name: "Android",
-    class: "bg-[#3ddc84] text-black",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Android,
   },
   ROOM: {
     name: "Room DB",
-    class: "bg-[#669df6] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Room,
   },
   TAILWIND: {
     name: "Tailwind CSS",
-    class: "bg-[#003159] text-white",
+    class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
     icon: Tailwind,
   },
 }
@@ -127,7 +127,7 @@ const PROJECTS = [
           {tags.map((tag) => (
             <li>
               <span
-                class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
+                class={tag.class}
               >
                 <tag.icon class="size-4" />
                 {tag.name}
