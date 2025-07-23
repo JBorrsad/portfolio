@@ -1,0 +1,93 @@
+---
+import MailIcon from "@/components/icons/Mail.astro"
+import WhatsAppIcon from "@/components/icons/WhatsApp.astro"
+import GitHubIcon from "@/components/icons/GitHubNew.astro"
+import LinkedInIcon from "@/components/icons/LinkedIn.astro"
+import DownloadIcon from "@/components/icons/Download.astro"
+---
+
+<div class="flex flex-col gap-6">
+  <p class="text-lg text-gray-700 dark:text-gray-300 mb-4">
+    ¿Quieres contactar conmigo? Te dejo todas las formas de hacerlo. ¡Estaré encantado de conocerte y hablar sobre proyectos, colaboraciones o cualquier cosa relacionada con el desarrollo!
+  </p>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <a
+      href="mailto:juan-borras@hotmail.com"
+      class="flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group hover:bg-blue-50 dark:hover:bg-blue-950/30"
+    >
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+        <MailIcon class="size-6 text-blue-600 dark:text-blue-400" />
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white">Email</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">juan-borras@hotmail.com</p>
+      </div>
+    </a>
+
+    <a
+      href="https://wa.me/34661437136"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-600 transition-colors group hover:bg-green-50 dark:hover:bg-green-950/30"
+    >
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 group-hover:bg-green-200 dark:group-hover:bg-green-800 transition-colors">
+        <WhatsAppIcon class="size-6 text-green-600 dark:text-green-400" />
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white">WhatsApp</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Envíame un mensaje</p>
+      </div>
+    </a>
+
+    <a
+      href="https://github.com/JBorrsad"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors group hover:bg-gray-50 dark:hover:bg-gray-800/30"
+    >
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 group-hover:bg-gray-200 dark:group-hover:bg-gray-700 transition-colors">
+        <GitHubIcon class="size-6 text-gray-700 dark:text-gray-300" />
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white">GitHub</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Ve mis proyectos</p>
+      </div>
+    </a>
+
+    <a
+      href="https://www.linkedin.com/in/juan-borrás-sada-a690b0239"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group hover:bg-blue-50 dark:hover:bg-blue-950/30"
+    >
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+        <LinkedInIcon class="size-6 text-blue-600 dark:text-blue-400" />
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-900 dark:text-white">LinkedIn</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Conectemos profesionalmente</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="mt-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30">
+    <div class="flex items-center gap-4">
+      <div class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900">
+        <DownloadIcon class="size-6 text-yellow-600 dark:text-yellow-400" />
+      </div>
+      <div class="flex-1">
+        <h3 class="font-semibold text-gray-900 dark:text-white">Curriculum Vitae</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Descarga mi CV completo en PDF</p>
+      </div>
+      <a
+        href="/portfolio/CV_Juan_Borras.pdf"
+        download="CV_Juan_Borras.pdf"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors"
+      >
+        <DownloadIcon class="size-4" />
+        Descargar CV
+      </a>
+    </div>
+  </div>
+</div> 

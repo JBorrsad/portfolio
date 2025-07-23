@@ -2,8 +2,10 @@
 import Layout from "@/layouts/Layout.astro"
 
 import AboutMe from "@/components/AboutMe.astro"
+import Contact from "@/components/Contact.astro"
 import Briefcase from "@/components/icons/Briefcase.astro"
 import CodeIcon from "@/components/icons/Code.astro"
+import MailIcon from "@/components/icons/Mail.astro"
 import Experience from "@/components/Experience.astro"
 import Education from "@/components/Education.astro"
 import EducationIcon from "@/components/icons/Education.astro"
@@ -55,6 +57,14 @@ import TitleSection from "@/components/TitleSection.astro"
         Sobre mí
       </TitleSection>
       <AboutMe />
+    </SectionContainer>
+
+    <SectionContainer id="contacto">
+      <TitleSection>
+        <MailIcon class="size-8" />
+        Contacto
+      </TitleSection>
+      <Contact />
     </SectionContainer>
   </div>
   </main>
