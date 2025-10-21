@@ -14,8 +14,8 @@ import Android from "./icons/Android.astro"
 import Room from "./icons/Room.astro"
 import AstroIcon from "./icons/Astro.astro"
 
-// Importamos los proyectos desde el JSON generado
-import projectsData from "@/data/projects.json"
+// Importamos los proyectos desde la nueva fuente
+import { getProjects } from "@/lib/projects"
 
 const TAGS = {
 	JAVA: {
@@ -75,13 +75,16 @@ const TAGS = {
 	},
 }
 
-// Mapeamos los proyectos del JSON a la estructura que necesita el template
+// Obtenemos los proyectos ya ordenados por lastCommitDate descendente
+const projectsData = getProjects();
+
+// Mapeamos los proyectos a la estructura que necesita el template
 const PROJECTS = projectsData.map(project => ({
 	title: project.title,
 	description: project.description,
-	link: project.homepage || project.repoUrl,
+	link: project.website,
 	github: project.repoUrl,
-	image: project.cover,
+	image: project.coverImage || "/projects/default.webp", // Fallback si no hay imagen
 	tags: project.tags.map((tagName: string) => TAGS[tagName as keyof typeof TAGS]).filter(Boolean)
 }))
 ---

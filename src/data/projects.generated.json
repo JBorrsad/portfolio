@@ -1,0 +1,30 @@
+[
+  {
+    "repo": "JBorrsad/portfolio",
+    "title": "Portfolio Personal - Auto-Sync",
+    "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados por último commit.",
+    "website": "https://jborrsad.github.io/portfolio",
+    "coverImage": "https://raw.githubusercontent.com/JBorrsad/portfolio/main/portfolio.webp",
+    "tags": [
+      "ASTRO",
+      "TAILWIND"
+    ],
+    "stars": 0,
+    "lastCommitDate": "2025-10-21T20:28:12Z",
+    "repoUrl": "https://github.com/JBorrsad/portfolio"
+  },
+  {
+    "repo": "JBorrsad/haion",
+    "title": "Haion Consulting - Sitio Web Corporativo con CMS",
+    "description": "Sitio web corporativo de asesoría empresarial con CMS estático SEO-friendly, panel de administración, autenticación segura y deploy automático a GitHub Pages.",
+    "website": "https://haion-consulting.es",
+    "coverImage": "/projects/haion.png",
+    "tags": [
+      "ASTRO",
+      "TAILWIND"
+    ],
+    "stars": 0,
+    "lastCommitDate": "2025-10-21T02:09:10Z",
+    "repoUrl": "https://github.com/JBorrsad/haion"
+  }
+]

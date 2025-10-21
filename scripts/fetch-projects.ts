@@ -1,50 +1,54 @@
 import { Octokit } from "octokit";
 import fs from "node:fs/promises";
 import path from "node:path";
+import yaml from "js-yaml";
+import dotenv from "dotenv";
+
+// Cargar variables de entorno del archivo .env
+dotenv.config();
 
 const OWNER = "JBorrsad";
-const BRANCH = "main";
 const PUBLIC_IMAGES_DIR = "public/projects";
 
 // Verifica que el token esté configurado
-if (!process.env.GH_TOKEN) {
-    console.warn("⚠️  GH_TOKEN no está configurado. Solo se pueden acceder a repositorios públicos.");
-    console.warn("   Para acceder a repositorios privados, configura la variable de entorno GH_TOKEN");
+const TOKEN = process.env.GH_READ_TOKEN || process.env.PORTFOLIO_READ_TOKEN || process.env.GH_TOKEN;
+if (!TOKEN) {
+    console.warn("⚠️  GH_READ_TOKEN no está configurado. Solo se pueden acceder a repositorios públicos.");
+    console.warn("   Para acceder a repositorios privados, configura la variable de entorno GH_READ_TOKEN");
 }
 
-const octo = new Octokit({ auth: process.env.GH_TOKEN });
+const octo = new Octokit({ auth: TOKEN });
 
 interface ProjectMeta {
-	publish: boolean;
-	title: string;
-	short: string;
-	cover: string;
-	order: number;
-	tags: string[];
-	readmePath?: string;
-	homepage?: string; // URL personalizada del proyecto
+    title?: string;
+    description?: string;
+    short?: string; // Formato viejo: descripción corta
+    website?: string;
+    homepage?: string; // Formato viejo: URL del proyecto
+    coverImage?: string; // Formato nuevo: ruta a la imagen
+    cover?: string; // Formato viejo: nombre del archivo en .portfolio/
+    tags?: string[];
 }
 
 interface Project {
-    slug: string;
+    repo: string;
     title: string;
     description: string;
+    website: string;
+    coverImage?: string;
     tags: string[];
-    order: number;
+    stars: number;
+    lastCommitDate: string;
     repoUrl: string;
-    homepage: string | null;
-    cover: string;
-    readme: string | null;
-    pushedAt: string | null;
 }
 
-async function getFileText(owner: string, repo: string, path: string): Promise<string | null> {
+async function getFileText(owner: string, repo: string, filePath: string, ref: string): Promise<string | null> {
     try {
         const { data } = await octo.request("GET /repos/{owner}/{repo}/contents/{path}", {
             owner,
             repo,
-            path,
-            ref: BRANCH
+            path: filePath,
+            ref
         });
 
         if ("download_url" in data && data.download_url) {
@@ -60,7 +64,29 @@ async function getFileText(owner: string, repo: string, path: string): Promise<s
     return null;
 }
 
-async function downloadImage(owner: string, repo: string, filePath: string, destPath: string): Promise<boolean> {
+async function getProjectMeta(owner: string, repo: string, ref: string): Promise<ProjectMeta | null> {
+    // Intenta descargar meta.json, meta.yml, meta.yaml en ese orden
+    const metaPaths = [".portfolio/meta.json", ".portfolio/meta.yml", ".portfolio/meta.yaml"];
+
+    for (const metaPath of metaPaths) {
+        const content = await getFileText(owner, repo, metaPath, ref);
+        if (content) {
+            try {
+                if (metaPath.endsWith(".json")) {
+                    return JSON.parse(content) as ProjectMeta;
+                } else {
+                    return yaml.load(content) as ProjectMeta;
+                }
+            } catch (error) {
+                console.warn(`   ⚠️  Error parseando ${metaPath}: ${error}`);
+            }
+        }
+    }
+
+    return null;
+}
+
+async function downloadImage(owner: string, repo: string, filePath: string, destPath: string, ref: string): Promise<boolean> {
     try {
         console.log(`   📥 Descargando imagen: ${filePath}`);
 
@@ -68,14 +94,14 @@ async function downloadImage(owner: string, repo: string, filePath: string, dest
             owner,
             repo,
             path: filePath,
-            ref: BRANCH
+            ref
         });
 
         if ("download_url" in data && data.download_url) {
             // Usar el token para autenticación al descargar la imagen
             const headers: HeadersInit = {};
-            if (process.env.GH_TOKEN) {
-                headers['Authorization'] = `token ${process.env.GH_TOKEN}`;
+            if (TOKEN) {
+                headers['Authorization'] = `token ${TOKEN}`;
             }
 
             const res = await fetch(data.download_url, { headers });
@@ -105,93 +131,128 @@ async function main() {
     await fs.mkdir(PUBLIC_IMAGES_DIR, { recursive: true });
     console.log(`📁 Carpeta de imágenes lista: ${PUBLIC_IMAGES_DIR}`);
 
-    // Usar /user/repos en lugar de /users/{username}/repos para obtener TODOS los repos (incluyendo privados)
-    const repos = await octo.request("GET /user/repos", {
-        per_page: 100,
-        sort: "updated",
-        affiliation: "owner" // Solo repos propios (incluye públicos y privados)
-    });
+    // Verificar si existe src/data/repositories.json
+    let targetRepos: string[] = [];
+    try {
+        const reposListContent = await fs.readFile("src/data/repositories.json", "utf-8");
+        targetRepos = JSON.parse(reposListContent);
+        console.log(`📋 Usando lista de repositorios de src/data/repositories.json (${targetRepos.length} repos)`);
+    } catch (error) {
+        // No existe repositories.json, listar todos los repos (públicos y privados si hay token)
+        console.log("📋 No se encontró src/data/repositories.json, buscando todos los repositorios...");
+        const repos = await octo.request("GET /user/repos", {
+            per_page: 100,
+            sort: "updated",
+            affiliation: "owner" // Solo repos propios (incluye públicos y privados)
+        });
 
-    console.log(`📦 Total de repositorios encontrados: ${repos.data.length}`);
+        // Filtrar los que contengan .portfolio
+        for (const r of repos.data) {
+            if (r.default_branch) {
+                const meta = await getProjectMeta(OWNER, r.name, r.default_branch);
+                if (meta) {
+                    targetRepos.push(`${OWNER}/${r.name}`);
+                }
+            }
+        }
+        console.log(`📦 Encontrados ${targetRepos.length} repositorios con .portfolio`);
+    }
 
     const projects: Project[] = [];
 
-    for (const r of repos.data) {
-        const repo = r.name;
-        console.log(`\n🔎 Revisando repositorio: ${repo}`);
+    for (const repoFullName of targetRepos) {
+        const [owner, repo] = repoFullName.split("/");
+        console.log(`\n🔎 Revisando repositorio: ${repoFullName}`);
 
-        // Intenta cargar meta.json desde la carpeta .portfolio
-        const metaRaw = await getFileText(OWNER, repo, ".portfolio/meta.json");
-
-        if (!metaRaw) {
-            console.log(`   ⏭️  No tiene .portfolio/meta.json`);
-            continue; // Si no existe, ignoramos este repo
-        }
-
-        console.log(`   ✅ Encontrado .portfolio/meta.json`);
-
-        let meta: ProjectMeta;
+        // Obtener información del repositorio
+        let repoData;
         try {
-            meta = JSON.parse(metaRaw);
+            const { data } = await octo.request("GET /repos/{owner}/{repo}", {
+                owner,
+                repo
+            });
+            repoData = data;
         } catch (error) {
-            console.warn(`⚠️  Error parseando meta.json en ${repo}:`, error);
+            console.warn(`   ⚠️  Error obteniendo datos del repositorio: ${error}`);
             continue;
         }
 
-        // Si publish es false, no lo incluimos
-        if (!meta.publish) {
-            console.log(`⏭️  Proyecto ${repo} marcado como no publicado, omitiendo...`);
+        const defaultBranch = repoData.default_branch;
+
+        // Intenta cargar meta desde .portfolio
+        const meta = await getProjectMeta(owner, repo, defaultBranch);
+
+        if (!meta) {
+            console.log(`   ⏭️  No tiene archivos .portfolio/meta.*`);
             continue;
         }
 
-        // Descargar la imagen de portada
-        const coverFileName = meta.cover || "cover.jpg";
-        const coverPath = `.portfolio/${coverFileName}`;
-        const ext = path.extname(coverFileName);
-        const localImageName = `${repo}${ext}`;
-        const localImagePath = path.join(PUBLIC_IMAGES_DIR, localImageName);
+        console.log(`   ✅ Encontrado metadata de .portfolio`);
 
-        const imageDownloaded = await downloadImage(OWNER, repo, coverPath, localImagePath);
+        // Resolver website con prioridad (compatible con formato viejo y nuevo)
+        const website = meta.website || meta.homepage || repoData.homepage || repoData.html_url;
 
-        // Si la imagen se descargó, usar ruta local; si no, usar URL de GitHub como fallback
-        const coverUrl = imageDownloaded
-            ? `/projects/${localImageName}`
-            : `https://raw.githubusercontent.com/${OWNER}/${repo}/${BRANCH}/.portfolio/${coverFileName}`;
+        // Resolver descripción (compatible con formato viejo y nuevo)
+        const description = meta.description || meta.short || repoData.description || "";
 
-		// Lee el README si se especificó
-		const readmePath = meta.readmePath || "README.md";
-		const readme = await getFileText(OWNER, repo, readmePath);
+        // Resolver coverImage (compatible con formato viejo y nuevo)
+        let coverImage: string | undefined = undefined;
+        const imagePath = meta.coverImage || (meta.cover ? `.portfolio/${meta.cover}` : null);
 
-		projects.push({
-			slug: repo,
-			title: meta.title || repo,
-			description: meta.short || r.description || "",
-			tags: meta.tags || [],
-			order: meta.order ?? 999,
-			repoUrl: r.html_url,
-			homepage: meta.homepage || r.homepage, // Priorizar homepage del meta.json
-			cover: coverUrl,
-			readme,
-			pushedAt: r.pushed_at
-		});
+        if (imagePath) {
+            // Verificar si es URL absoluta
+            if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+                coverImage = imagePath;
+            } else {
+                // Es ruta relativa, descargar la imagen
+                const coverFileName = path.basename(imagePath);
+                const ext = path.extname(coverFileName);
+                const localImageName = `${repo}${ext}`;
+                const localImagePath = path.join(PUBLIC_IMAGES_DIR, localImageName);
 
-        console.log(`✅ Proyecto añadido: ${meta.title}`);
+                const imageDownloaded = await downloadImage(owner, repo, imagePath, localImagePath, defaultBranch);
+
+                if (imageDownloaded) {
+                    coverImage = `/projects/${localImageName}`;
+                    console.log(`   🖼️  Imagen descargada: ${localImageName}`);
+                } else {
+                    // Fallback a URL raw de GitHub
+                    coverImage = `https://raw.githubusercontent.com/${owner}/${repo}/${defaultBranch}/${imagePath}`;
+                    console.log(`   🔗 Usando URL remota para imagen`);
+                }
+            }
+        }
+
+        const project: Project = {
+            repo: repoFullName,
+            title: meta.title || repoData.name,
+            description,
+            website,
+            coverImage,
+            tags: meta.tags || [],
+            stars: repoData.stargazers_count,
+            lastCommitDate: repoData.pushed_at,
+            repoUrl: repoData.html_url
+        };
+
+        projects.push(project);
+        console.log(`✅ Proyecto añadido: ${project.title}`);
     }
 
-    // Ordena según el campo order
-    projects.sort((a, b) => a.order - b.order);
+    // Ordenar descendente por lastCommitDate
+    projects.sort((a, b) => new Date(b.lastCommitDate).getTime() - new Date(a.lastCommitDate).getTime());
 
     // Crea la carpeta src/data si no existe
     await fs.mkdir("src/data", { recursive: true });
 
-    // Guarda el JSON
+    // Guarda el JSON con salida determinista
     await fs.writeFile(
-        "src/data/projects.json",
+        "src/data/projects.generated.json",
         JSON.stringify(projects, null, 2),
         "utf8"
     );
 
-    console.log(`\n🎉 Generados ${projects.length} proyectos en src/data/projects.json`);
+    console.log(`\n🎉 Generados ${projects.length} proyectos en src/data/projects.generated.json`);
 }
 
 main().catch((error) => {
