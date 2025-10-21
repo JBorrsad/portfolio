@@ -78,6 +78,21 @@ const TAGS = {
 // Obtenemos los proyectos ya ordenados por lastCommitDate descendente
 const projectsData = getProjects();
 
+// Función para formatear la fecha
+const formatDate = (dateString: string) => {
+	const date = new Date(dateString);
+	const now = new Date();
+	const diffTime = Math.abs(now.getTime() - date.getTime());
+	const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+	
+	if (diffDays === 0) return "Hoy";
+	if (diffDays === 1) return "Ayer";
+	if (diffDays < 7) return `Hace ${diffDays} días`;
+	if (diffDays < 30) return `Hace ${Math.floor(diffDays / 7)} semanas`;
+	if (diffDays < 365) return `Hace ${Math.floor(diffDays / 30)} meses`;
+	return `Hace ${Math.floor(diffDays / 365)} años`;
+};
+
 // Mapeamos los proyectos a la estructura que necesita el template
 const PROJECTS = projectsData.map(project => ({
 	title: project.title,
@@ -85,13 +100,14 @@ const PROJECTS = projectsData.map(project => ({
 	link: project.website,
 	github: project.repoUrl,
 	image: project.coverImage || "/projects/default.webp", // Fallback si no hay imagen
-	tags: project.tags.map((tagName: string) => TAGS[tagName as keyof typeof TAGS]).filter(Boolean)
+	tags: project.tags.map((tagName: string) => TAGS[tagName as keyof typeof TAGS]).filter(Boolean),
+	lastCommit: formatDate(project.lastCommitDate)
 }))
 ---
 
 <div class="flex flex-col gap-y-16">
   {
-    PROJECTS.map(({ image, title, description, tags, link, github }) => (
+    PROJECTS.map(({ image, title, description, tags, link, github, lastCommit }) => (
     <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
   <div class="w-full md:w-1/2">
     <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
@@ -118,6 +134,9 @@ const PROJECTS = projectsData.map(project => ({
         </ul>
 
       <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
+      <div class="mt-2 text-xs text-gray-500 dark:text-gray-500">
+        Última actualización: {lastCommit}
+      </div>
       <footer class="flex items-end justify-start mt-4 gap-x-4">
           {github && (
             <LinkButton href={github}>
