@@ -15,13 +15,14 @@ if (!process.env.GH_TOKEN) {
 const octo = new Octokit({ auth: process.env.GH_TOKEN });
 
 interface ProjectMeta {
-    publish: boolean;
-    title: string;
-    short: string;
-    cover: string;
-    order: number;
-    tags: string[];
-    readmePath?: string;
+	publish: boolean;
+	title: string;
+	short: string;
+	cover: string;
+	order: number;
+	tags: string[];
+	readmePath?: string;
+	homepage?: string; // URL personalizada del proyecto
 }
 
 interface Project {
@@ -157,22 +158,22 @@ async function main() {
             ? `/projects/${localImageName}`
             : `https://raw.githubusercontent.com/${OWNER}/${repo}/${BRANCH}/.portfolio/${coverFileName}`;
 
-        // Lee el README si se especificó
-        const readmePath = meta.readmePath || "README.md";
-        const readme = await getFileText(OWNER, repo, readmePath);
+		// Lee el README si se especificó
+		const readmePath = meta.readmePath || "README.md";
+		const readme = await getFileText(OWNER, repo, readmePath);
 
-        projects.push({
-            slug: repo,
-            title: meta.title || repo,
-            description: meta.short || r.description || "",
-            tags: meta.tags || [],
-            order: meta.order ?? 999,
-            repoUrl: r.html_url,
-            homepage: r.homepage,
-            cover: coverUrl,
-            readme,
-            pushedAt: r.pushed_at
-        });
+		projects.push({
+			slug: repo,
+			title: meta.title || repo,
+			description: meta.short || r.description || "",
+			tags: meta.tags || [],
+			order: meta.order ?? 999,
+			repoUrl: r.html_url,
+			homepage: meta.homepage || r.homepage, // Priorizar homepage del meta.json
+			cover: coverUrl,
+			readme,
+			pushedAt: r.pushed_at
+		});
 
         console.log(`✅ Proyecto añadido: ${meta.title}`);
     }
