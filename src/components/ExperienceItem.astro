@@ -4,30 +4,56 @@ import LinkInline from "./LinkInline.astro"
 interface Props {
   title: string
   company: string
-  description: string
+  subtitle?: string
+  description: string | Array<string | {text: string, link?: string}>
   link?: string
   date: string
+  year: string
 }
 
-const { title, company, description, link, date } = Astro.props
+const { title, company, subtitle, description, link, date, year } = Astro.props
+const isArray = Array.isArray(description)
+
+// Procesar items con links
+let htmlContent = '';
+if (isArray) {
+  const items = description as Array<string | {text: string, link?: string}>;
+  htmlContent = items.map(item => {
+    if (typeof item === 'string') {
+      return `<li>${item}</li>`;
+    } else {
+      const text = item.text.replace(
+        /(aquí|aqui)/gi,
+        `<a href="${item.link}" class="text-yellow-400 hover:underline font-semibold">$1</a>`
+      );
+      return `<li>${text}</li>`;
+    }
+  }).join('');
+}
 ---
 
 <div
-  class="relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:grid-cols-5 md:gap-10 md:space-x-4]"
+  class="relative ml-20 mr-4 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:ml-24 md:mr-12 md:grid-cols-5 md:gap-10 md:space-x-4]"
 >
   <div class="relative pb-12 md:col-span-2">
     <div class="sticky top-0">
       <span class="text-yellow-400 -left-[42px] absolute rounded-full text-5xl"
         >&bull;</span
       >
+      <span class="text-gray-800 dark:text-white -left-[95px] absolute text-2xl font-bold md:-left-[105px] top-[2px]"
+        >{year}</span
+      >
 
       <h3 class="text-xl font-bold text-yellow-400">{title}</h3>
-      <h4 class="font-semibold text-xl text-gray-600 dark:text-white">{company}</h4>
-      <time class="p-0 m-0 text-sm text-gray-600/80 dark:text-white/80">{date}</time>
+      {subtitle && <p class="text-sm text-gray-600 dark:text-gray-400 mt-1" style="font-size: 14px; font-weight: normal;">{subtitle}</p>}
     </div>
   </div>
   <div class="relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3">
-    {description}
+    {isArray ? (
+      <ul class="list-disc list-inside space-y-1" set:html={htmlContent} />
+    ) : (
+      <p>{description}</p>
+    )}
     {
       link && (
         <LinkInline href={link}>

@@ -27,9 +27,7 @@ import DownloadPill from "@/components/DownloadPill.astro"
     Hola! soy Juan Borrás
   </h1>
   <div class="typewriter">
-    <p class="typewriter-text text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white">
-      Developer
-    </p>
+    <span class="typewriter-text" id="typewriter-text"></span>
   </div>
   <p
     class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
@@ -64,40 +62,76 @@ import DownloadPill from "@/components/DownloadPill.astro"
 </div>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+
   .typewriter {
-    display: flex;
+    display: inline-flex;
     justify-content: flex-start;
     margin-top: 0.5rem;
   }
 
   .typewriter-text {
-    font-family: monospace;
+    font-family: 'Jersey 10', 'Courier New', Courier, monospace;
+    font-size: 20px;
+    font-weight: 400;
     margin: 0;
-    overflow: hidden;
+    padding: 0.5rem 1rem;
+    background-color: #000000;
+    color: #ffffff;
     white-space: nowrap;
-    border-right: 2px solid;
-    border-color: #374151; /* gray-700 for light mode */
-    width: 0;
-    max-width: max-content;
-    animation: typing 3.5s steps(9) forwards, blink 1s step-end infinite;
+    min-height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
   }
 
-  .dark .typewriter-text {
-    border-color: #d1d5db; /* gray-300 for dark mode */
+  .cursor {
+    display: inline-block;
+    color: #ffffff;
+    font-family: 'Onest Variable', system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 0.8;
+    margin-left: 2px;
+    vertical-align: middle;
   }
 
-  @keyframes typing {
-    from {
-      width: 0;
+  @keyframes cursorBlink {
+    0%, 49% {
+      opacity: 1;
     }
-    to {
-      width: 9ch; /* 9 caracteres para "Developer" */
-    }
-  }
-
-  @keyframes blink {
-    50% {
-      border-color: transparent;
+    50%, 100% {
+      opacity: 0;
     }
   }
 </style>
+
+<script>
+  const text = "Fullstack Developer";
+  const typewriterElement = document.getElementById("typewriter-text");
+  let index = 0;
+
+  function typeWriter() {
+    if (!typewriterElement) return;
+    
+    if (index < text.length) {
+      // Añadir la siguiente letra
+      const currentText = text.substring(0, index + 1);
+      typewriterElement.innerHTML = currentText + '<span class="cursor">|</span>';
+      index++;
+      setTimeout(typeWriter, 250); // 0.25 segundos por letra
+    } else {
+      // Cuando termine, hacer que la barra parpadee
+      const currentText = text;
+      const cursorSpan = document.createElement('span');
+      cursorSpan.className = 'cursor';
+      cursorSpan.textContent = '|';
+      cursorSpan.style.animation = 'cursorBlink 0.75s steps(1, end) infinite';
+      
+      typewriterElement.innerHTML = currentText;
+      typewriterElement.appendChild(cursorSpan);
+    }
+  }
+
+  // Iniciar el efecto cuando la página cargue
+  document.addEventListener('DOMContentLoaded', typeWriter);
+</script>
