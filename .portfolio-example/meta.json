@@ -1,0 +1,9 @@
+{
+  "publish": true,
+  "title": "Nombre de tu Proyecto",
+  "short": "Descripción corta del proyecto que aparecerá en la tarjeta",
+  "cover": "cover.jpg",
+  "order": 10,
+  "tags": ["KOTLIN", "ANDROID", "FIREBASE"],
+  "readmePath": "README.md"
+}
