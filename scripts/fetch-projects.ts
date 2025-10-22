@@ -189,6 +189,23 @@ async function main() {
 
         console.log(`   ✅ Encontrado metadata de .portfolio`);
 
+        // Obtener la fecha del último commit de forma precisa
+        let lastCommitDate = repoData.pushed_at;
+        try {
+            const { data: commits } = await octo.request("GET /repos/{owner}/{repo}/commits", {
+                owner,
+                repo,
+                sha: defaultBranch,
+                per_page: 1
+            });
+            if (commits.length > 0 && commits[0].commit.committer?.date) {
+                lastCommitDate = commits[0].commit.committer.date;
+                console.log(`   📅 Fecha del último commit: ${lastCommitDate}`);
+            }
+        } catch (error) {
+            console.warn(`   ⚠️  No se pudo obtener el último commit, usando pushed_at`);
+        }
+
         // Resolver website con prioridad (compatible con formato viejo y nuevo)
         const website = meta.website || meta.homepage || repoData.homepage || repoData.html_url;
 
@@ -231,7 +248,7 @@ async function main() {
             coverImage,
             tags: meta.tags || [],
             stars: repoData.stargazers_count,
-            lastCommitDate: repoData.pushed_at,
+            lastCommitDate,
             repoUrl: repoData.html_url
         };
 
