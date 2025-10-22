@@ -10,8 +10,23 @@
       "TAILWIND"
     ],
     "stars": 0,
-    "lastCommitDate": "2025-10-22T03:47:19Z",
+    "lastCommitDate": "2025-10-22T05:18:27Z",
+    "lastCommitDateFormatted": "22/10/2025 • 07:18",
     "repoUrl": "https://github.com/JBorrsad/portfolio"
+  },
+  {
+    "repo": "JBorrsad/clinica-sada-borras",
+    "title": "Clínica Dental Sada Borrás",
+    "description": "Página web de la mejor clínica dental en todo Navarra, con más de 40 años de experiencia. Desarrollado con muchísimo cariño y paciencia, Astro y Tailwind CSS, que incluye gestión de servicios odontológicos, integración con Google Reviews API para mostrar valoraciones en tiempo real, galería de instalaciones, sistema de información de contacto multi-sede y diseño responsive moderno. Con este proyecto pretendo demostrar de todo lo que soy capaz!",
+    "website": "https://jborrsad.github.io/clinica-sada-borras/",
+    "coverImage": "/projects/clinica-sada-borras.png",
+    "tags": [
+      "ASTRO"
+    ],
+    "stars": 0,
+    "lastCommitDate": "2025-10-22T05:14:57Z",
+    "lastCommitDateFormatted": "22/10/2025 • 07:14",
+    "repoUrl": "https://github.com/JBorrsad/clinica-sada-borras"
   },
   {
     "repo": "JBorrsad/haion",
@@ -25,19 +40,7 @@
     ],
     "stars": 0,
     "lastCommitDate": "2025-10-22T03:41:38Z",
+    "lastCommitDateFormatted": "22/10/2025 • 05:41",
     "repoUrl": "https://github.com/JBorrsad/haion"
-  },
-  {
-    "repo": "JBorrsad/clinica-sada-borras",
-    "title": "Clínica Dental Sada Borrás",
-    "description": "Página web de la mejor clínica dental en todo Navarra, con más de 40 años de experiencia. Desarrollado con muchísimo cariño y paciencia, Astro y Tailwind CSS, que incluye gestión de servicios odontológicos, integración con Google Reviews API para mostrar valoraciones en tiempo real, galería de instalaciones, sistema de información de contacto multi-sede y diseño responsive moderno. Con este proyecto pretendo demostrar de todo lo que soy capaz!",
-    "website": "https://jborrsad.github.io/clinica-sada-borras/",
-    "coverImage": "/projects/clinica-sada-borras.png",
-    "tags": [
-      "ASTRO"
-    ],
-    "stars": 0,
-    "lastCommitDate": "2025-10-22T03:16:21Z",
-    "repoUrl": "https://github.com/JBorrsad/clinica-sada-borras"
   }
 ]

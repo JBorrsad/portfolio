@@ -9,6 +9,7 @@ export interface Project {
     tags: string[];
     stars: number;
     lastCommitDate: string;
+    lastCommitDateFormatted: string;
     repoUrl: string;
 }
 
