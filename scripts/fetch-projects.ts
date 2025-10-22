@@ -31,16 +31,16 @@ interface ProjectMeta {
 }
 
 interface Project {
-	repo: string;
-	title: string;
-	description: string;
-	website: string;
-	coverImage?: string;
-	tags: string[];
-	stars: number;
-	lastCommitDate: string;
-	lastCommitDateFormatted: string;
-	repoUrl: string;
+    repo: string;
+    title: string;
+    description: string;
+    website: string;
+    coverImage?: string;
+    tags: string[];
+    stars: number;
+    lastCommitDate: string;
+    lastCommitDateFormatted: string;
+    repoUrl: string;
 }
 
 async function getFileText(owner: string, repo: string, filePath: string, ref: string): Promise<string | null> {
@@ -265,28 +265,28 @@ async function main() {
             }
         }
 
-		// Formatear la fecha con zona horaria de Madrid
-		const formattedDate = new Date(lastCommitDate).toLocaleString('es-ES', {
-			timeZone: 'Europe/Madrid',
-			day: '2-digit',
-			month: '2-digit',
-			year: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		}).replace(',', ' •');
+        // Formatear la fecha con zona horaria de Madrid
+        const formattedDate = new Date(lastCommitDate).toLocaleString('es-ES', {
+            timeZone: 'Europe/Madrid',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).replace(',', ' •');
 
-		const project: Project = {
-			repo: repoFullName,
-			title: meta.title || repoData.name,
-			description,
-			website,
-			coverImage,
-			tags: meta.tags || [],
-			stars: repoData.stargazers_count,
-			lastCommitDate,
-			lastCommitDateFormatted: formattedDate,
-			repoUrl: repoData.html_url
-		};
+        const project: Project = {
+            repo: repoFullName,
+            title: meta.title || repoData.name,
+            description,
+            website,
+            coverImage,
+            tags: meta.tags || [],
+            stars: repoData.stargazers_count,
+            lastCommitDate,
+            lastCommitDateFormatted: formattedDate,
+            repoUrl: repoData.html_url
+        };
 
         projects.push(project);
         console.log(`✅ Proyecto añadido: ${project.title}`);
