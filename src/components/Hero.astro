@@ -10,7 +10,7 @@ import SocialPill from "@/components/SocialPill.astro"
 import DownloadPill from "@/components/DownloadPill.astro"
 ---
 
-<div class="max-w-xl">
+<div class="max-w-7xl mx-auto px-8 md:px-16 lg:px-20">
   <div class="flex gap-4 mb-4">
     <img
       class="rounded-full shadow-lg size-16"
@@ -21,23 +21,32 @@ import DownloadPill from "@/components/DownloadPill.astro"
       <BadgeStatic>Disponible para trabajar</BadgeStatic>
     </div>
   </div>
-  <h1
-    class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
-  >
-    Hola! soy Juan Borrás
-  </h1>
-  <div class="typewriter">
-    <span class="typewriter-text" id="typewriter-text"></span>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+    <div>
+      <h1
+        class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white whitespace-nowrap"
+      >
+        Hola! soy Juan Borrás
+      </h1>
+      <div class="typewriter">
+        <span class="typewriter-text" id="typewriter-text"></span>
+      </div>
+    </div>
+    
+    <div class="md:mt-44">
+      <p
+        class="text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
+      >
+        Soy Desarrollador Full Stack con formación en DAM.
+        Apasionado por la arquitectura limpia y las buenas
+        prácticas. Tengo mucha motivación por seguir
+        aprendiendo y aportar soluciones sólidas
+      </p>
+    </div>
   </div>
-  <p
-    class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
-  >
-    Soy Desarrollador Full Stack con formación en DAM<br/>
-    Apasionado por la arquitectura limpia y las buenas<br/>
-    prácticas. Tengo mucha motivación por seguir<br/>
-    aprendiendo y aportar soluciones sólidas
-  </p>
-  <nav class="flex flex-wrap gap-4 mt-8">
+  
+  <nav class="flex flex-wrap justify-center gap-4 mt-12">
     <SocialPill href="mailto:juan-borras@hotmail.com">
       <MailIcon class="size-4" />
       Mail
