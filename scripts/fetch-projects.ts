@@ -131,15 +131,12 @@ async function main() {
     await fs.mkdir(PUBLIC_IMAGES_DIR, { recursive: true });
     console.log(`📁 Carpeta de imágenes lista: ${PUBLIC_IMAGES_DIR}`);
 
-    // Verificar si existe src/data/repositories.json
+    // Buscar automáticamente TODOS los repositorios con .portfolio
     let targetRepos: string[] = [];
+
+    console.log("🔍 Buscando automáticamente todos los repositorios con carpeta .portfolio...");
+
     try {
-        const reposListContent = await fs.readFile("src/data/repositories.json", "utf-8");
-        targetRepos = JSON.parse(reposListContent);
-        console.log(`📋 Usando lista de repositorios de src/data/repositories.json (${targetRepos.length} repos)`);
-    } catch (error) {
-        // No existe repositories.json, listar todos los repos (públicos y privados si hay token)
-        console.log("📋 No se encontró src/data/repositories.json, buscando todos los repositorios...");
         const repos = await octo.request("GET /user/repos", {
             per_page: 100,
             sort: "updated",
@@ -152,10 +149,14 @@ async function main() {
                 const meta = await getProjectMeta(OWNER, r.name, r.default_branch);
                 if (meta) {
                     targetRepos.push(`${OWNER}/${r.name}`);
+                    console.log(`   ✅ Encontrado: ${OWNER}/${r.name}`);
                 }
             }
         }
-        console.log(`📦 Encontrados ${targetRepos.length} repositorios con .portfolio`);
+        console.log(`\n📦 Total: ${targetRepos.length} repositorios con .portfolio`);
+    } catch (error) {
+        console.error("❌ Error al buscar repositorios:", error);
+        throw error;
     }
 
     const projects: Project[] = [];
@@ -214,14 +215,19 @@ async function main() {
 
         // Resolver coverImage (compatible con formato viejo y nuevo)
         let coverImage: string | undefined = undefined;
-        const imagePath = meta.coverImage || (meta.cover ? `.portfolio/${meta.cover}` : null);
+        let imagePath = meta.coverImage || (meta.cover ? `.portfolio/${meta.cover}` : null);
 
         if (imagePath) {
             // Verificar si es URL absoluta
             if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
                 coverImage = imagePath;
             } else {
-                // Es ruta relativa, descargar la imagen
+                // Es ruta relativa, asegurarse de que tenga el prefijo .portfolio/
+                if (!imagePath.startsWith(".portfolio/")) {
+                    imagePath = `.portfolio/${imagePath}`;
+                }
+
+                // Descargar la imagen
                 const coverFileName = path.basename(imagePath);
                 const ext = path.extname(coverFileName);
                 const localImageName = `${repo}${ext}`;

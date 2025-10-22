@@ -1,8 +1,21 @@
 [
   {
+    "repo": "JBorrsad/clinica-sada-borras",
+    "title": "Clínica Dental Sada Borrás",
+    "description": "Página web de la mejor clínica dental en todo Navarra, con más de 40 años de experiencia. Desarrollado con muchísimo cariño y paciencia, Astro y Tailwind CSS, que incluye gestión de servicios odontológicos, integración con Google Reviews API para mostrar valoraciones en tiempo real, galería de instalaciones, sistema de información de contacto multi-sede y diseño responsive moderno. Con este proyecto pretendo demostrar de todo lo que soy capaz!",
+    "website": "https://jborrsad.github.io/clinica-sada-borras/",
+    "coverImage": "/projects/clinica-sada-borras.png",
+    "tags": [
+      "ASTRO"
+    ],
+    "stars": 0,
+    "lastCommitDate": "2025-10-22T03:16:21Z",
+    "repoUrl": "https://github.com/JBorrsad/clinica-sada-borras"
+  },
+  {
     "repo": "JBorrsad/portfolio",
-    "title": "Portfolio Personal - Auto-Sync",
-    "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados por último commit.",
+    "title": "Mi portfolio personal con sincronización automática",
+    "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados cronológicamente por commit.",
     "website": "https://jborrsad.github.io/portfolio",
     "coverImage": "https://jborrsad.github.io/portfolio/projects/portfolio.webp",
     "tags": [
@@ -10,7 +23,7 @@
       "TAILWIND"
     ],
     "stars": 0,
-    "lastCommitDate": "2025-10-21T21:54:25Z",
+    "lastCommitDate": "2025-10-22T03:00:14Z",
     "repoUrl": "https://github.com/JBorrsad/portfolio"
   },
   {
@@ -24,7 +37,7 @@
       "TAILWIND"
     ],
     "stars": 0,
-    "lastCommitDate": "2025-10-21T20:45:12Z",
+    "lastCommitDate": "2025-10-21T20:45:08Z",
     "repoUrl": "https://github.com/JBorrsad/haion"
   }
 ]
