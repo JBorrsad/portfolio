@@ -1,6 +1,6 @@
 {
   "title": "Portfolio Personal - Auto-Sync",
-  "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados por último commit.",
+  "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados cronológicamente por commit.",
   "website": "https://jborrsad.github.io/portfolio",
   "coverImage": "https://jborrsad.github.io/portfolio/projects/portfolio.webp",
   "tags": ["ASTRO", "TAILWIND"]
