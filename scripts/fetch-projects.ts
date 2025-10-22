@@ -197,14 +197,32 @@ async function main() {
                 owner,
                 repo,
                 sha: defaultBranch,
-                per_page: 1
+                per_page: 1,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
             });
-            if (commits.length > 0 && commits[0].commit.committer?.date) {
-                lastCommitDate = commits[0].commit.committer.date;
-                console.log(`   📅 Fecha del último commit: ${lastCommitDate}`);
+
+            if (commits.length > 0) {
+                // Usar author.date que es la fecha original del commit
+                // (committer.date puede cambiar en rebases/merges)
+                const commitDate = commits[0].commit.author?.date || commits[0].commit.committer?.date;
+                if (commitDate) {
+                    lastCommitDate = commitDate;
+                    const formattedDate = new Date(commitDate).toLocaleString('es-ES', {
+                        timeZone: 'Europe/Madrid',
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    console.log(`   📅 Último commit: ${formattedDate} (${commits[0].sha.substring(0, 7)})`);
+                }
             }
         } catch (error) {
-            console.warn(`   ⚠️  No se pudo obtener el último commit, usando pushed_at`);
+            console.warn(`   ⚠️  Error obteniendo commits:`, error instanceof Error ? error.message : error);
+            console.warn(`   ℹ️  Usando pushed_at como fallback: ${repoData.pushed_at}`);
         }
 
         // Resolver website con prioridad (compatible con formato viejo y nuevo)
