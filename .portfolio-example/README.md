@@ -1,126 +1,105 @@
-# Cómo configurar tus proyectos para que aparezcan automáticamente en tu portfolio
+# 🚀 Configurar Auto-Sync para Proyectos del Portfolio
 
-## 📋 Pasos para añadir un proyecto nuevo
+## ⚡ Prompt para IA (Copia y Pega)
 
-Para que un proyecto de GitHub aparezca automáticamente en tu portfolio web, sigue estos pasos:
+Copia el siguiente prompt y pégalo en un chat con una IA (Cursor, Claude, ChatGPT, etc.) cuando estés en el repositorio del proyecto que quieres añadir a tu portfolio:
 
-### 1. Crear la carpeta `.portfolio` en la raíz de tu proyecto
+```
+Necesito configurar este repositorio para que aparezca en mi portfolio web personal que usa un sistema de auto-sync.
 
-En cualquier repositorio que quieras mostrar en tu portfolio, crea una carpeta llamada `.portfolio` en la raíz del proyecto.
+Debes crear la estructura necesaria:
 
-### 2. Añadir el archivo `meta.json`
+1. Crear la carpeta `.portfolio` en la raíz del proyecto
+2. Crear el archivo `.portfolio/meta.json` con esta estructura:
 
-Dentro de `.portfolio`, crea un archivo `meta.json` con la siguiente estructura:
-
-```json
 {
-  "publish": true,
-  "title": "Nombre de tu Proyecto",
-  "short": "Descripción corta del proyecto que aparecerá en la tarjeta",
-  "cover": "cover.jpg",
-  "order": 10,
-  "tags": ["KOTLIN", "ANDROID", "FIREBASE"],
-  "readmePath": "README.md"
+  "title": "[Nombre descriptivo del proyecto]",
+  "description": "[Descripción detallada del proyecto, qué hace, para qué sirve]",
+  "website": "[URL del proyecto desplegado, si aplica, sino la URL del repo]",
+  "coverImage": "cover.webp",
+  "tags": ["TAG1", "TAG2", "TAG3"]
 }
+
+3. Si no existe una imagen de portada, sugiéreme qué tipo de imagen debería usar para este proyecto
+
+TAGS DISPONIBLES (elige solo los que apliquen):
+- "JAVA"
+- "SPRING"
+- "ANGULAR"
+- "REACT"
+- "NEXTJS"
+- "KOTLIN"
+- "FIREBASE"
+- "MAPS"
+- "ANDROID"
+- "ROOM"
+- "TAILWIND"
+- "ASTRO"
+
+IMPORTANTE:
+- Analiza el código del repositorio actual para determinar qué tags usar
+- Escribe una descripción profesional y técnica
+- El título debe ser claro y descriptivo
+- Si el proyecto tiene un README, úsalo como referencia
+- La coverImage debe ser "cover.webp", "cover.png" o "cover.jpg" (el archivo debe estar en .portfolio/)
+
+Genera los archivos necesarios para este proyecto.
 ```
 
-**Campos disponibles:**
+---
 
-- `publish` (boolean): Si es `true`, el proyecto se mostrará en el portfolio. Si es `false`, se ignorará.
-- `title` (string): El título que aparecerá en la tarjeta del proyecto.
-- `short` (string): Descripción corta que se mostrará en la tarjeta.
-- `cover` (string): Nombre del archivo de imagen dentro de la carpeta `.portfolio`.
-- `order` (number): Orden en el que aparecerá el proyecto (menor número = más arriba).
-- `tags` (array): Array de strings con las tecnologías usadas. Valores disponibles:
-  - `"JAVA"`
-  - `"SPRING"`
-  - `"ANGULAR"`
-  - `"REACT"`
-  - `"KOTLIN"`
-  - `"FIREBASE"`
-  - `"MAPS"`
-  - `"ANDROID"`
-  - `"ROOM"`
-  - `"TAILWIND"`
-  - `"ASTRO"`
-- `readmePath` (string, opcional): Ruta al archivo README. Por defecto es `"README.md"`.
+## 📋 Configuración Manual
 
-### 3. Añadir la imagen de portada
+Si prefieres hacerlo manualmente, sigue estos pasos:
 
-Coloca tu imagen de portada dentro de `.portfolio/` con el nombre que especificaste en `cover` (por ejemplo, `cover.jpg` o `cover.png`).
-
-La imagen debe ser:
-
-- Formato: JPG, PNG o WebP
-- Tamaño recomendado: 1200x630px (aspect ratio 16:9)
-- Peso máximo recomendado: 500KB
-
-### 4. Estructura final
-
-Tu repositorio debería verse así:
+### 1. Crear la estructura
 
 ```
 tu-proyecto/
 ├── .portfolio/
 │   ├── meta.json
-│   └── cover.jpg
+│   └── cover.webp
 ├── README.md
-├── src/
-└── ...
+└── src/
 ```
 
-### 5. Hacer push a GitHub
-
-Una vez que hayas añadido estos archivos a tu repositorio y hagas push a GitHub, el proyecto aparecerá automáticamente en tu portfolio web en la próxima actualización (se actualiza automáticamente cada vez que haces push al repositorio del portfolio).
-
-## 🔄 Actualización automática
-
-El portfolio se actualiza automáticamente cuando:
-
-- Haces push a la rama `main` del repositorio del portfolio
-- El script busca todos tus repositorios públicos
-- Solo muestra los que tienen la carpeta `.portfolio` con `publish: true`
-
-## 📝 Notas importantes
-
-1. **Repositorios privados**: Solo funcionará con repositorios públicos de GitHub.
-2. **Orden de aparición**: Los proyectos se ordenan por el campo `order` (de menor a mayor).
-3. **Tags disponibles**: Solo usa los tags que están definidos en la lista. Si usas un tag no definido, no se mostrará.
-4. **Imágenes**: Las imágenes se cargan directamente desde GitHub usando `raw.githubusercontent.com`.
-
-## 🎨 Ejemplo completo
-
-Un ejemplo de `meta.json` para un proyecto de Android:
+### 2. Archivo `meta.json`
 
 ```json
 {
-  "publish": true,
-  "title": "DogTracker - Monitor de Mascotas",
-  "short": "Aplicación Android completa para el monitoreo en tiempo real de mascotas con GPS y notificaciones.",
-  "cover": "cover.jpg",
-  "order": 2,
-  "tags": ["KOTLIN", "ANDROID", "FIREBASE", "MAPS"],
-  "readmePath": "README.md"
+  "title": "Nombre descriptivo del proyecto",
+  "description": "Descripción completa del proyecto, qué hace y para qué sirve",
+  "website": "https://tu-proyecto.com",
+  "coverImage": "cover.webp",
+  "tags": ["KOTLIN", "ANDROID", "FIREBASE"]
 }
 ```
 
-## ❓ Solución de problemas
+### 3. Tags disponibles
 
-**Mi proyecto no aparece en el portfolio:**
+```
+JAVA, SPRING, ANGULAR, REACT, NEXTJS, KOTLIN,
+FIREBASE, MAPS, ANDROID, ROOM, TAILWIND, ASTRO
+```
 
-1. Verifica que la carpeta se llame exactamente `.portfolio` (con el punto al inicio)
-2. Verifica que `meta.json` esté bien formado (JSON válido)
-3. Verifica que `publish` esté en `true`
-4. Verifica que el repositorio sea público
-5. Espera a que se ejecute el workflow de GitHub Actions
+### 4. Imagen de portada
 
-**La imagen no se muestra:**
+- **Formatos:** WebP, PNG o JPG
+- **Tamaño recomendado:** 1200x630px (16:9)
+- **Ubicación:** `.portfolio/cover.webp`
 
-1. Verifica que el nombre del archivo en `cover` coincida exactamente con el archivo
-2. Verifica que la imagen esté dentro de `.portfolio/`
-3. Verifica que la imagen sea JPG, PNG o WebP
+---
 
-**Los tags no aparecen:**
+## 🔄 Actualización Automática
 
-1. Verifica que los nombres de los tags coincidan exactamente con los disponibles
-2. Recuerda que van en mayúsculas: `"KOTLIN"` no `"kotlin"`
+El portfolio se actualiza automáticamente cuando:
+
+- Haces push al repositorio del portfolio
+- Los proyectos se ordenan por fecha del último commit
+- Solo se muestran repos con carpeta `.portfolio/`
+
+---
+
+## 📖 Ejemplo Completo
+
+Ver el archivo `meta.json` en esta misma carpeta para un ejemplo funcional.

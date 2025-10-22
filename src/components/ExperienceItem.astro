@@ -14,6 +14,11 @@ interface Props {
 const { title, company, subtitle, description, link, date, year } = Astro.props
 const isArray = Array.isArray(description)
 
+// Procesar título para separar el texto entre paréntesis
+const titleParts = title.match(/^(.+?)(\([^)]+\))$/)
+const mainTitle = titleParts ? titleParts[1].trim() : title
+const ectsText = titleParts ? titleParts[2] : null
+
 // Procesar items con links
 let htmlContent = '';
 if (isArray) {
@@ -44,7 +49,10 @@ if (isArray) {
         >{year}</span
       >
 
-      <h3 class="text-xl font-bold text-yellow-400">{title}</h3>
+      <h3 class="text-xl font-bold text-yellow-400">
+        {mainTitle}
+        {ectsText && <span class="block text-gray-500 dark:text-gray-400 font-normal text-base mt-1">{ectsText}</span>}
+      </h3>
       {subtitle && <p class="text-sm text-gray-600 dark:text-gray-400 mt-1" style="font-size: 14px; font-weight: normal;">{subtitle}</p>}
     </div>
   </div>

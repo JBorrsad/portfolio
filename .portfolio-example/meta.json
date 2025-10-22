@@ -1,9 +1,7 @@
 {
-  "publish": true,
-  "title": "Nombre de tu Proyecto",
-  "short": "Descripción corta del proyecto que aparecerá en la tarjeta",
-  "cover": "cover.jpg",
-  "order": 10,
-  "tags": ["KOTLIN", "ANDROID", "FIREBASE"],
-  "readmePath": "README.md"
+  "title": "Nombre Descriptivo del Proyecto",
+  "description": "Descripción completa y profesional del proyecto. Explica qué hace, para qué sirve, qué tecnologías usa y qué problemas resuelve.",
+  "website": "https://tu-proyecto-desplegado.com",
+  "coverImage": "cover.webp",
+  "tags": ["KOTLIN", "ANDROID", "FIREBASE", "MAPS"]
 }
