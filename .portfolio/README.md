@@ -80,20 +80,32 @@ jobs:
 
 ## 🏷️ Tags Disponibles
 
-Elige solo los que apliquen a tu proyecto:
+**✨ Sistema Automatizado de Iconos**
 
-- `JAVA`
-- `SPRING`
-- `ANGULAR`
-- `REACT`
-- `NEXTJS`
-- `KOTLIN`
-- `FIREBASE`
-- `MAPS`
-- `ANDROID`
-- `ROOM`
-- `TAILWIND`
-- `ASTRO`
+El sistema ahora descarga automáticamente los iconos desde [Simple Icons](https://simpleicons.org/) para cualquier tag que uses. **No necesitas mantener una lista de tags permitidos** - simplemente usa el nombre de la tecnología en tu `meta.json` y el sistema encontrará el icono automáticamente.
+
+**Ejemplos de tags que funcionan:**
+- `HTML`, `CSS`, `JavaScript`, `TypeScript`
+- `Bootstrap`, `Tailwind CSS`, `jQuery`
+- `React`, `Angular`, `Vue`, `Next.js`
+- `Java`, `Spring Boot`, `Node.js`
+- `Python`, `Django`, `Flask`
+- `Docker`, `Kubernetes`, `Git`
+- Y cualquier otra tecnología que esté en Simple Icons
+
+**Ejemplo en `meta.json`:**
+```json
+{
+  "tags": ["HTML", "CSS", "Bootstrap", "jQuery"]
+}
+```
+
+El sistema automáticamente:
+1. Buscará el icono en Simple Icons
+2. Lo descargará en `public/icons/`
+3. Lo mostrará en el portfolio
+
+Si un tag no tiene icono disponible, se mostrará sin icono pero con el nombre del tag.
 
 ---
 

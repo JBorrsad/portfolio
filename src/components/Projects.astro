@@ -1,117 +1,46 @@
 ---
-import GitHub from "./icons/GitHub.astro"
-import Tailwind from "./icons/Tailwind.astro"
 import Link from "./icons/Link.astro"
+import GitHub from "./icons/GitHub.astro"
 import LinkButton from "./LinkButton.astro"
-import Java from "./icons/Java.astro"
-import Spring from "./icons/Spring.astro"
-import Angular from "./icons/Angular.astro"
-import ReactNative from "./icons/ReactNative.astro"
-import Kotlin from "./icons/Kotlin.astro"
-import Firebase from "./icons/Firebase.astro"
-import GoogleMaps from "./icons/GoogleMaps.astro"
-import Android from "./icons/Android.astro"
-import Room from "./icons/Room.astro"
-import AstroIcon from "./icons/Astro.astro"
-
-// Importamos los proyectos desde la nueva fuente
 import { getProjects } from "@/lib/projects"
 
-const TAGS = {
-	JAVA: {
-		name: "Java",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Java,
-	},
-	SPRING: {
-		name: "Spring Boot",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Spring,
-	},
-	ANGULAR: {
-		name: "Angular",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Angular,
-	},
-	REACT: {
-		name: "React Native",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: ReactNative,
-	},
-	KOTLIN: {
-		name: "Kotlin",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Kotlin,
-	},
-	FIREBASE: {
-		name: "Firebase",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Firebase,
-	},
-	MAPS: {
-		name: "Google Maps",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: GoogleMaps,
-	},
-	ANDROID: {
-		name: "Android",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Android,
-	},
-	ROOM: {
-		name: "Room DB",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Room,
-	},
-	TAILWIND: {
-		name: "Tailwind CSS",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: Tailwind,
-	},
-	ASTRO: {
-		name: "Astro",
-		class: "inline-flex items-center justify-center gap-2 px-4 py-1 text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white text-xs",
-		icon: AstroIcon,
-	},
-}
-
-// Obtenemos los proyectos ya ordenados por lastCommitDate descendente
 const projectsData = getProjects();
-
-// Mapeamos los proyectos a la estructura que necesita el template
-const PROJECTS = projectsData.map(project => ({
-	title: project.title,
-	description: project.description,
-	link: project.website,
-	github: project.repoUrl,
-	image: project.coverImage || "/projects/default.webp", // Fallback si no hay imagen
-	tags: project.tags.map((tagName: string) => TAGS[tagName as keyof typeof TAGS]).filter(Boolean),
-	lastCommit: project.lastCommitDateFormatted
-}))
 ---
 
 <div class="flex flex-col gap-y-16">
   {
-    PROJECTS.map(({ image, title, description, tags, link, github, lastCommit }) => (
+    projectsData.map((project) => (
     <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
   <div class="w-full md:w-1/2">
     <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
-      <img alt="Recién llegado vs 5 años en Nueva Zelanda" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
+      <img 
+        alt={project.title} 
+        class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" 
+        loading="lazy" 
+        src={project.coverImage || "/projects/default.webp"} 
+      />
     </div>
   </div>
 
   <div class="w-full md:w-1/2 md:max-w-lg">
     <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-      {title}
+      {project.title}
     </h3>
+    
     <div class="flex flex-wrap mt-2">
       <ul class="flex flex-row mb-2 gap-x-2 flex-wrap">
-          {tags.map((tag) => (
+          {project.tags.map((tag) => (
             <li>
-              <span
-                class={tag.class}
-              >
-                <tag.icon class="size-4" />
+              <span class="inline-flex items-center justify-center gap-2 px-4 py-1 text-xs text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white">
+                {/* Si hay icono descargado, lo mostramos */}
+                {tag.iconPath ? (
+                  <img 
+                    src={tag.iconPath} 
+                    alt={tag.name} 
+                    class="size-4" 
+                    style="filter: var(--icon-filter, none);"
+                  /> 
+                ) : null}
                 {tag.name}
               </span>
             </li>
@@ -119,20 +48,22 @@ const PROJECTS = projectsData.map(project => ({
         </ul>
 
       <div class="w-full mt-3 mb-2 text-xs font-medium text-gray-600 dark:text-gray-400">
-        <span class="opacity-75">Última actualización:</span> {lastCommit}
+        <span class="opacity-75">Última actualización:</span> {project.lastCommitDateFormatted}
       </div>
 
-      <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
+      <div class="mt-2 text-gray-700 dark:text-gray-400 text-pretty">
+        {project.description}
+      </div>
+      
       <footer class="flex items-end justify-start mt-4 gap-x-4">
-          {github && (
-            <LinkButton href={github}>
+          {project.repoUrl && (
+            <LinkButton href={project.repoUrl}>
               <GitHub class="size-6" />
               Code
-              
             </LinkButton>
           )}
-          {link && (
-            <LinkButton href={link}>
+          {project.website && (
+            <LinkButton href={project.website}>
               <Link class="size-4" />
               Preview
             </LinkButton>
@@ -145,5 +76,10 @@ const PROJECTS = projectsData.map(project => ({
   }
 </div>
 
-
-
+<style>
+  /* Ajuste para iconos SVG en modo oscuro si es necesario */
+  :global(.dark) img[src$=".svg"] {
+    /* Descomenta la siguiente línea si los iconos se ven mal en modo oscuro */
+    /* filter: invert(1) brightness(0.9); */
+  }
+</style>

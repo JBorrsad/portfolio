@@ -9,6 +9,24 @@ dotenv.config();
 
 const OWNER = "JBorrsad";
 const PUBLIC_IMAGES_DIR = "public/projects";
+const PUBLIC_ICONS_DIR = "public/icons"; // Nueva carpeta para iconos
+
+// Mapa para corregir nombres que no coinciden con Simple Icons
+const ICON_ALIASES: Record<string, string> = {
+	"c#": "csharp",
+	".net": "dotnet",
+	"c++": "cplusplus",
+	"vue": "vueDotjs",
+	"maps": "googlemaps",
+	"react": "react",
+	"react native": "react",
+	"nextjs": "nextdotjs",
+	"next.js": "nextdotjs",
+	"spring boot": "spring",
+	"spring": "spring",
+	"tailwind": "tailwindcss",
+	"tailwind css": "tailwindcss"
+};
 
 // Verifica que el token esté configurado
 const TOKEN = process.env.GH_READ_TOKEN || process.env.PORTFOLIO_READ_TOKEN || process.env.GH_TOKEN;
@@ -30,13 +48,19 @@ interface ProjectMeta {
     tags?: string[];
 }
 
+interface ProjectTag {
+	name: string;
+	iconPath: string;
+	slug: string;
+}
+
 interface Project {
     repo: string;
     title: string;
     description: string;
     website: string;
     coverImage?: string;
-    tags: string[];
+    tags: ProjectTag[];
     stars: number;
     lastCommitDate: string;
     lastCommitDateFormatted: string;
@@ -87,6 +111,65 @@ async function getProjectMeta(owner: string, repo: string, ref: string): Promise
     return null;
 }
 
+// --- NUEVA FUNCIÓN: Descargar Icono desde Simple Icons ---
+async function ensureIconExists(tagName: string): Promise<string> {
+	// 1. Normalizar nombre (ej: "Spring Boot" -> "springboot")
+	let slug = tagName.toLowerCase().replace(/[\s\.]/g, '').replace(/[#]/g, 'sharp');
+	
+	// 2. Aplicar alias manuales si existen
+	const tagLower = tagName.toLowerCase();
+	if (ICON_ALIASES[tagLower]) {
+		slug = ICON_ALIASES[tagLower];
+	}
+	
+	const fileName = `${slug}.svg`;
+	const localPath = path.join(PUBLIC_ICONS_DIR, fileName);
+	const publicUrl = `/icons/${fileName}`;
+	
+	// Si ya existe, no lo descargamos de nuevo
+	try {
+		await fs.access(localPath);
+		return publicUrl;
+	} catch {
+		// No existe, intentamos descargarlo
+	}
+	
+	console.log(`   ⬇️  Buscando icono para: ${tagName} (${slug})...`);
+	
+	try {
+		// Intentamos descargar desde Simple Icons CDN
+		// Usamos el CDN que devuelve SVG directamente
+		const res = await fetch(`https://cdn.simpleicons.org/${slug}`);
+		if (res.ok) {
+			const contentType = res.headers.get('content-type');
+			if (contentType?.includes('svg') || contentType?.includes('image')) {
+				const svgContent = await res.text();
+				// Verificar que el contenido sea SVG válido
+				if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
+					await fs.writeFile(localPath, svgContent, 'utf8');
+					console.log(`   ✅ Icono descargado: ${fileName}`);
+					return publicUrl;
+				}
+			}
+		}
+		// Si falla el CDN, intentar la API directa de Simple Icons
+		const res2 = await fetch(`https://simpleicons.org/icons/${slug}.svg`);
+		if (res2.ok) {
+			const svgContent = await res2.text();
+			if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
+				await fs.writeFile(localPath, svgContent, 'utf8');
+				console.log(`   ✅ Icono descargado (API directa): ${fileName}`);
+				return publicUrl;
+			}
+		}
+		console.warn(`   ⚠️  No se encontró icono para "${tagName}" en Simple Icons (slug: ${slug})`);
+		return ""; 
+	} catch (e) {
+		console.error(`   ❌ Error descargando icono ${slug}:`, e instanceof Error ? e.message : e);
+		return "";
+	}
+}
+
 async function downloadImage(owner: string, repo: string, filePath: string, destPath: string, ref: string): Promise<boolean> {
     try {
         console.log(`   📥 Descargando imagen: ${filePath}`);
@@ -128,9 +211,11 @@ async function main() {
     console.log("🔍 Buscando repositorios de GitHub...");
     console.log(`👤 Usuario: ${OWNER}`);
 
-    // Crear carpeta para imágenes si no existe
+    // Crear carpetas necesarias
     await fs.mkdir(PUBLIC_IMAGES_DIR, { recursive: true });
+    await fs.mkdir(PUBLIC_ICONS_DIR, { recursive: true });
     console.log(`📁 Carpeta de imágenes lista: ${PUBLIC_IMAGES_DIR}`);
+    console.log(`📁 Carpeta de iconos lista: ${PUBLIC_ICONS_DIR}`);
 
     // Buscar automáticamente TODOS los repositorios con .portfolio
     let targetRepos: string[] = [];
@@ -232,6 +317,19 @@ async function main() {
         // Resolver descripción (compatible con formato viejo y nuevo)
         const description = meta.description || meta.short || repoData.description || "";
 
+        // Procesar Tags e Iconos automáticamente
+        const rawTags: string[] = meta.tags || [];
+        const processedTags: ProjectTag[] = [];
+
+        for (const tag of rawTags) {
+            const iconPath = await ensureIconExists(tag);
+            processedTags.push({
+                name: tag,
+                slug: tag.toLowerCase().replace(/[\s\.]/g, '').replace(/[#]/g, 'sharp'),
+                iconPath: iconPath
+            });
+        }
+
         // Resolver coverImage (compatible con formato viejo y nuevo)
         let coverImage: string | undefined = undefined;
         let imagePath = meta.coverImage || (meta.cover ? `.portfolio/${meta.cover}` : null);
@@ -281,7 +379,7 @@ async function main() {
             description,
             website,
             coverImage,
-            tags: meta.tags || [],
+            tags: processedTags, // Usamos los tags procesados con iconos
             stars: repoData.stargazers_count,
             lastCommitDate,
             lastCommitDateFormatted: formattedDate,

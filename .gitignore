@@ -27,6 +27,9 @@ public/projects/*.jpg
 public/projects/*.jpeg
 public/projects/*.webp
 
+# icons (downloaded dynamically from Simple Icons during build)
+public/icons/*.svg
+
 pnpm-lock.yaml
 
 .cursor/*
