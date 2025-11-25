@@ -32,13 +32,13 @@ const projectsData = getProjects();
           {project.tags.map((tag) => (
             <li>
               <span class="inline-flex items-center justify-center gap-2 px-4 py-1 text-xs text-gray-800 transition bg-gray-100 border border-gray-300 rounded-full dark:bg-gray-800 dark:border-gray-600 dark:text-white">
-                {/* Si hay icono descargado, lo mostramos */}
+                {/* Si hay icono descargado, lo mostramos - SIN filtros para mantener colores originales */}
                 {tag.iconPath ? (
                   <img 
                     src={tag.iconPath} 
                     alt={tag.name} 
                     class="size-4" 
-                    style="filter: var(--icon-filter, none);"
+                    style="object-fit: contain;"
                   /> 
                 ) : null}
                 {tag.name}
@@ -77,9 +77,6 @@ const projectsData = getProjects();
 </div>
 
 <style>
-  /* Ajuste para iconos SVG en modo oscuro si es necesario */
-  :global(.dark) img[src$=".svg"] {
-    /* Descomenta la siguiente línea si los iconos se ven mal en modo oscuro */
-    /* filter: invert(1) brightness(0.9); */
-  }
+  /* Los iconos mantienen sus colores originales de marca */
+  /* No aplicamos filtros CSS para preservar los colores originales de Simple Icons */
 </style>

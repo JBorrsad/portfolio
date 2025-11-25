@@ -111,7 +111,7 @@ async function getProjectMeta(owner: string, repo: string, ref: string): Promise
     return null;
 }
 
-// --- NUEVA FUNCIÓN: Descargar Icono desde Simple Icons ---
+// --- FUNCIÓN: Descargar Icono desde Simple Icons con Color Original de Marca ---
 async function ensureIconExists(tagName: string): Promise<string> {
 	// 1. Normalizar nombre (ej: "Spring Boot" -> "springboot")
 	let slug = tagName.toLowerCase().replace(/[\s\.]/g, '').replace(/[#]/g, 'sharp');
@@ -137,31 +137,63 @@ async function ensureIconExists(tagName: string): Promise<string> {
 	console.log(`   ⬇️  Buscando icono para: ${tagName} (${slug})...`);
 	
 	try {
-		// Intentamos descargar desde Simple Icons CDN
-		// Usamos el CDN que devuelve SVG directamente
-		const res = await fetch(`https://cdn.simpleicons.org/${slug}`);
-		if (res.ok) {
-			const contentType = res.headers.get('content-type');
-			if (contentType?.includes('svg') || contentType?.includes('image')) {
-				const svgContent = await res.text();
-				// Verificar que el contenido sea SVG válido
-				if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
-					await fs.writeFile(localPath, svgContent, 'utf8');
-					console.log(`   ✅ Icono descargado: ${fileName}`);
-					return publicUrl;
+		// Paso 1: Obtener el color oficial de la marca desde la API de Simple Icons
+		let colorHex: string | null = null;
+		try {
+			const colorRes = await fetch(`https://api.simpleicons.org/v1/icons/${slug}`);
+			if (colorRes.ok) {
+				const iconInfo = await colorRes.json();
+				if (iconInfo.hex) {
+					colorHex = `#${iconInfo.hex}`;
+					console.log(`   🎨 Color oficial: ${colorHex}`);
 				}
 			}
+		} catch (colorError) {
+			// Si falla la API de color, continuamos igual
 		}
-		// Si falla el CDN, intentar la API directa de Simple Icons
-		const res2 = await fetch(`https://simpleicons.org/icons/${slug}.svg`);
+		
+		// Paso 2: Descargar el SVG desde Simple Icons
+		const res = await fetch(`https://simpleicons.org/icons/${slug}.svg`);
+		
+		if (res.ok) {
+			let svgContent = await res.text();
+			
+			// Verificar que el contenido sea SVG válido
+			if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
+				// Paso 3: Aplicar el color oficial si lo tenemos
+				if (colorHex) {
+					// Reemplazar currentColor con el color oficial de la marca
+					svgContent = svgContent.replace(/fill="currentColor"/gi, `fill="${colorHex}"`);
+					svgContent = svgContent.replace(/fill='currentColor'/gi, `fill="${colorHex}"`);
+					// Si el path no tiene fill, añadirlo
+					svgContent = svgContent.replace(
+						/(<path[^>]*?)(\s*\/?>)/gi, 
+						(match, before, after) => {
+							if (!before.includes('fill=')) {
+								return `${before} fill="${colorHex}"${after}`;
+							}
+							return match;
+						}
+					);
+				}
+				
+				await fs.writeFile(localPath, svgContent, 'utf8');
+				console.log(`   ✅ Icono descargado con color original: ${fileName}`);
+				return publicUrl;
+			}
+		}
+		
+		// Fallback: Intentar desde el CDN (puede que tenga el color ya aplicado)
+		const res2 = await fetch(`https://cdn.simpleicons.org/${slug}`);
 		if (res2.ok) {
 			const svgContent = await res2.text();
 			if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
 				await fs.writeFile(localPath, svgContent, 'utf8');
-				console.log(`   ✅ Icono descargado (API directa): ${fileName}`);
+				console.log(`   ✅ Icono descargado desde CDN: ${fileName}`);
 				return publicUrl;
 			}
 		}
+		
 		console.warn(`   ⚠️  No se encontró icono para "${tagName}" en Simple Icons (slug: ${slug})`);
 		return ""; 
 	} catch (e) {
