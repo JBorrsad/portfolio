@@ -1,7 +1,0 @@
-{
-  "title": "Nombre Descriptivo del Proyecto",
-  "description": "Descripción completa y profesional del proyecto. Explica qué hace, para qué sirve, qué tecnologías usa y qué problemas resuelve.",
-  "website": "https://tu-proyecto-desplegado.com",
-  "coverImage": "cover.webp",
-  "tags": ["KOTLIN", "ANDROID", "FIREBASE", "MAPS"]
-}
