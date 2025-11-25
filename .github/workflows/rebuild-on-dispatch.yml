@@ -19,9 +19,6 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,7 +37,7 @@ jobs:
 
       - name: Generate project data
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}
         run: npm run sync:projects
 
       - name: Build with Astro
