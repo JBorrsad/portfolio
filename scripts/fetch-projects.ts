@@ -111,17 +111,22 @@ async function getProjectMeta(owner: string, repo: string, ref: string): Promise
     return null;
 }
 
-// --- FUNCIÓN: Descargar Icono desde Simple Icons con Color Original de Marca ---
-async function ensureIconExists(tagName: string): Promise<string> {
-	// 1. Normalizar nombre (ej: "Spring Boot" -> "springboot")
-	let slug = tagName.toLowerCase().replace(/[\s\.]/g, '').replace(/[#]/g, 'sharp');
-	
-	// 2. Aplicar alias manuales si existen
+// --- FUNCIÓN HELPER: Normalizar nombre de tag a slug para Simple Icons ---
+function normalizeTagToSlug(tagName: string): string {
 	const tagLower = tagName.toLowerCase();
+	
+	// 1. Aplicar alias manuales si existen
 	if (ICON_ALIASES[tagLower]) {
-		slug = ICON_ALIASES[tagLower];
+		return ICON_ALIASES[tagLower];
 	}
 	
+	// 2. Normalizar nombre (ej: "Spring Boot" -> "springboot")
+	return tagName.toLowerCase().replace(/[\s\.]/g, '').replace(/[#]/g, 'sharp');
+}
+
+// --- FUNCIÓN SIMPLIFICADA: Descargar Icono desde Simple Icons CDN con Color Original ---
+async function ensureIconExists(tagName: string): Promise<string> {
+	const slug = normalizeTagToSlug(tagName);
 	const fileName = `${slug}.svg`;
 	const localPath = path.join(PUBLIC_ICONS_DIR, fileName);
 	const publicUrl = `/icons/${fileName}`;
@@ -134,67 +139,25 @@ async function ensureIconExists(tagName: string): Promise<string> {
 		// No existe, intentamos descargarlo
 	}
 	
-	console.log(`   ⬇️  Buscando icono para: ${tagName} (${slug})...`);
+	console.log(`   ⬇️  Descargando icono: ${tagName} (${slug})...`);
 	
 	try {
-		// Paso 1: Obtener el color oficial de la marca desde la API de Simple Icons
-		let colorHex: string | null = null;
-		try {
-			const colorRes = await fetch(`https://api.simpleicons.org/v1/icons/${slug}`);
-			if (colorRes.ok) {
-				const iconInfo = await colorRes.json();
-				if (iconInfo.hex) {
-					colorHex = `#${iconInfo.hex}`;
-					console.log(`   🎨 Color oficial: ${colorHex}`);
-				}
-			}
-		} catch (colorError) {
-			// Si falla la API de color, continuamos igual
-		}
-		
-		// Paso 2: Descargar el SVG desde Simple Icons
-		const res = await fetch(`https://simpleicons.org/icons/${slug}.svg`);
+		// Descargar EXCLUSIVAMENTE desde el CDN de Simple Icons
+		// El CDN ya devuelve el SVG con el color oficial de la marca aplicado
+		const res = await fetch(`https://cdn.simpleicons.org/${slug}`);
 		
 		if (res.ok) {
-			let svgContent = await res.text();
+			const svgContent = await res.text();
 			
 			// Verificar que el contenido sea SVG válido
 			if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
-				// Paso 3: Aplicar el color oficial si lo tenemos
-				if (colorHex) {
-					// Reemplazar currentColor con el color oficial de la marca
-					svgContent = svgContent.replace(/fill="currentColor"/gi, `fill="${colorHex}"`);
-					svgContent = svgContent.replace(/fill='currentColor'/gi, `fill="${colorHex}"`);
-					// Si el path no tiene fill, añadirlo
-					svgContent = svgContent.replace(
-						/(<path[^>]*?)(\s*\/?>)/gi, 
-						(match, before, after) => {
-							if (!before.includes('fill=')) {
-								return `${before} fill="${colorHex}"${after}`;
-							}
-							return match;
-						}
-					);
-				}
-				
 				await fs.writeFile(localPath, svgContent, 'utf8');
-				console.log(`   ✅ Icono descargado con color original: ${fileName}`);
+				console.log(`   ✅ Icono descargado: ${fileName}`);
 				return publicUrl;
 			}
 		}
 		
-		// Fallback: Intentar desde el CDN (puede que tenga el color ya aplicado)
-		const res2 = await fetch(`https://cdn.simpleicons.org/${slug}`);
-		if (res2.ok) {
-			const svgContent = await res2.text();
-			if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
-				await fs.writeFile(localPath, svgContent, 'utf8');
-				console.log(`   ✅ Icono descargado desde CDN: ${fileName}`);
-				return publicUrl;
-			}
-		}
-		
-		console.warn(`   ⚠️  No se encontró icono para "${tagName}" en Simple Icons (slug: ${slug})`);
+		console.warn(`   ⚠️  No se encontró icono para "${tagName}" (slug: ${slug})`);
 		return ""; 
 	} catch (e) {
 		console.error(`   ❌ Error descargando icono ${slug}:`, e instanceof Error ? e.message : e);
@@ -354,10 +317,11 @@ async function main() {
         const processedTags: ProjectTag[] = [];
 
         for (const tag of rawTags) {
+            const slug = normalizeTagToSlug(tag);
             const iconPath = await ensureIconExists(tag);
             processedTags.push({
                 name: tag,
-                slug: tag.toLowerCase().replace(/[\s\.]/g, '').replace(/[#]/g, 'sharp'),
+                slug: slug,
                 iconPath: iconPath
             });
         }
