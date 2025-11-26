@@ -6,27 +6,54 @@
     "website": "https://jborrsad.github.io/portfolio",
     "coverImage": "https://jborrsad.github.io/portfolio/projects/portfolio.webp",
     "tags": [
-      "ASTRO",
-      "TAILWIND"
+      {
+        "name": "ASTRO",
+        "slug": "astro",
+        "iconPath": "/icons/astro.svg"
+      },
+      {
+        "name": "TAILWIND",
+        "slug": "tailwindcss",
+        "iconPath": "/icons/tailwindcss.svg"
+      }
     ],
     "stars": 0,
-    "lastCommitDate": "2025-10-22T05:18:27Z",
-    "lastCommitDateFormatted": "22/10/2025 • 07:18",
+    "lastCommitDate": "2025-11-25T23:59:59Z",
+    "lastCommitDateFormatted": "26/11/2025 • 00:59",
     "repoUrl": "https://github.com/JBorrsad/portfolio"
   },
   {
-    "repo": "JBorrsad/clinica-sada-borras",
-    "title": "Clínica Dental Sada Borrás",
-    "description": "Página web de la mejor clínica dental en todo Navarra, con más de 40 años de experiencia. Desarrollado con muchísimo cariño y paciencia, Astro y Tailwind CSS, que incluye gestión de servicios odontológicos, integración con Google Reviews API para mostrar valoraciones en tiempo real, galería de instalaciones, sistema de información de contacto multi-sede y diseño responsive moderno. Con este proyecto pretendo demostrar de todo lo que soy capaz!",
-    "website": "https://jborrsad.github.io/clinica-sada-borras/",
-    "coverImage": "/projects/clinica-sada-borras.png",
+    "repo": "JBorrsad/inmov",
+    "title": "Prueba Técnica - InmoValley",
+    "description": "Prueba técnica de maquetación para una entrevista. Replicación del diseño de una inmobiliaria con HTML5, CSS3 (BEM), Bootstrap 5 y jQuery. Incluye buscador con filtros avanzados, sistema de favoritos con localStorage, menú móvil, animaciones y diseño responsive.",
+    "website": "https://jborrsad.github.io/inmov/",
+    "coverImage": "/projects/inmov.png",
     "tags": [
-      "ASTRO"
+      {
+        "name": "HTML",
+        "slug": "html",
+        "iconPath": ""
+      },
+      {
+        "name": "CSS",
+        "slug": "css",
+        "iconPath": "/icons/css.svg"
+      },
+      {
+        "name": "Bootstrap",
+        "slug": "bootstrap",
+        "iconPath": "/icons/bootstrap.svg"
+      },
+      {
+        "name": "jQuery",
+        "slug": "jquery",
+        "iconPath": "/icons/jquery.svg"
+      }
     ],
     "stars": 0,
-    "lastCommitDate": "2025-10-22T05:14:57Z",
-    "lastCommitDateFormatted": "22/10/2025 • 07:14",
-    "repoUrl": "https://github.com/JBorrsad/clinica-sada-borras"
+    "lastCommitDate": "2025-11-25T23:27:41Z",
+    "lastCommitDateFormatted": "26/11/2025 • 00:27",
+    "repoUrl": "https://github.com/JBorrsad/inmov"
   },
   {
     "repo": "JBorrsad/haion",
@@ -35,12 +62,71 @@
     "website": "https://haion-consulting.es",
     "coverImage": "/projects/haion.png",
     "tags": [
-      "ASTRO",
-      "TAILWIND"
+      {
+        "name": "ASTRO",
+        "slug": "astro",
+        "iconPath": "/icons/astro.svg"
+      },
+      {
+        "name": "TAILWIND",
+        "slug": "tailwindcss",
+        "iconPath": "/icons/tailwindcss.svg"
+      }
     ],
     "stars": 0,
-    "lastCommitDate": "2025-10-22T03:41:38Z",
-    "lastCommitDateFormatted": "22/10/2025 • 05:41",
+    "lastCommitDate": "2025-11-25T23:22:07Z",
+    "lastCommitDateFormatted": "26/11/2025 • 00:22",
     "repoUrl": "https://github.com/JBorrsad/haion"
+  },
+  {
+    "repo": "JBorrsad/clinica-sada-borras",
+    "title": "Clínica Dental Sada Borrás",
+    "description": "Página web de la mejor clínica dental en todo Navarra, con más de 40 años de experiencia. Desarrollado con muchísimo cariño y paciencia, Astro y Tailwind CSS, que incluye gestión de servicios odontológicos, integración con Google Reviews API para mostrar valoraciones en tiempo real, galería de instalaciones, sistema de información de contacto multi-sede y diseño responsive moderno. Con este proyecto pretendo demostrar de todo lo que soy capaz!",
+    "website": "https://jborrsad.github.io/clinica-sada-borras/",
+    "coverImage": "/projects/clinica-sada-borras.png",
+    "tags": [
+      {
+        "name": "ASTRO",
+        "slug": "astro",
+        "iconPath": "/icons/astro.svg"
+      }
+    ],
+    "stars": 0,
+    "lastCommitDate": "2025-10-26T20:00:48Z",
+    "lastCommitDateFormatted": "26/10/2025 • 21:00",
+    "repoUrl": "https://github.com/JBorrsad/clinica-sada-borras"
+  },
+  {
+    "repo": "JBorrsad/PMDM_DEIN_FINAL",
+    "title": "PawTracker",
+    "description": "Sistema de monitorización GPS en tiempo real para mascotas. Permite rastrear la ubicación de perros mediante GPS, definir zonas seguras con geofencing, y recibir notificaciones push instantáneas cuando salen de las zonas designadas. Incluye gestión de perfiles de múltiples mascotas, sincronización en tiempo real con Firebase, autenticación segura, y modo de simulación para pruebas.",
+    "website": "https://jborrsad.github.io/PMDM_DEIN_FINAL/",
+    "coverImage": "/projects/PMDM_DEIN_FINAL.png",
+    "tags": [
+      {
+        "name": "ANDROID",
+        "slug": "android",
+        "iconPath": "/icons/android.svg"
+      },
+      {
+        "name": "KOTLIN",
+        "slug": "kotlin",
+        "iconPath": "/icons/kotlin.svg"
+      },
+      {
+        "name": "FIREBASE",
+        "slug": "firebase",
+        "iconPath": "/icons/firebase.svg"
+      },
+      {
+        "name": "MAPS",
+        "slug": "googlemaps",
+        "iconPath": "/icons/googlemaps.svg"
+      }
+    ],
+    "stars": 0,
+    "lastCommitDate": "2025-10-25T17:38:38Z",
+    "lastCommitDateFormatted": "25/10/2025 • 19:38",
+    "repoUrl": "https://github.com/JBorrsad/PMDM_DEIN_FINAL"
   }
 ]

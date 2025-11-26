@@ -37,7 +37,7 @@ jobs:
       - name: Fetch projects from GitHub
         run: npm run sync:projects
         env:
-          GH_TOKEN: ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}
+          GH_ALL_TOKEN: ${{ secrets.GH_ALL_TOKEN }}
 
       - name: Build with Astro
         run: npm run build

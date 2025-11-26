@@ -37,7 +37,7 @@ jobs:
 
       - name: Generate project data
         env:
-          GH_TOKEN: ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}
+          GH_ALL_TOKEN: ${{ secrets.GH_ALL_TOKEN }}
         run: npm run sync:projects
 
       - name: Build with Astro

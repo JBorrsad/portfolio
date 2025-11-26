@@ -4,8 +4,19 @@ import path from "node:path";
 import yaml from "js-yaml";
 import dotenv from "dotenv";
 
-// Cargar variables de entorno del archivo .env
-dotenv.config();
+// Cargar variables de entorno del archivo .env desde la raíz del proyecto
+const envPath = path.resolve(process.cwd(), ".env");
+const envResult = dotenv.config({ path: envPath });
+
+// Debug: verificar si se cargó el archivo
+if (envResult.error) {
+	console.warn(`⚠️  No se pudo cargar .env: ${envResult.error.message}`);
+} else if (envResult.parsed) {
+	console.log(`📄 Archivo .env cargado desde: ${envPath}`);
+	// Debug: mostrar qué variables se cargaron (sin mostrar valores completos)
+	const loadedVars = Object.keys(envResult.parsed);
+	console.log(`   Variables cargadas: ${loadedVars.join(", ")}`);
+}
 
 const OWNER = "JBorrsad";
 const PUBLIC_IMAGES_DIR = "public/projects";
@@ -29,10 +40,21 @@ const ICON_ALIASES: Record<string, string> = {
 };
 
 // Verifica que el token esté configurado
-const TOKEN = process.env.GH_READ_TOKEN || process.env.PORTFOLIO_READ_TOKEN || process.env.GH_TOKEN;
-if (!TOKEN) {
-    console.warn("⚠️  GH_READ_TOKEN no está configurado. Solo se pueden acceder a repositorios públicos.");
-    console.warn("   Para acceder a repositorios privados, configura la variable de entorno GH_READ_TOKEN");
+const TOKEN = process.env.GH_ALL_TOKEN || process.env.GH_READ_TOKEN || process.env.PORTFOLIO_READ_TOKEN || process.env.GH_TOKEN;
+
+// Debug: mostrar si se encontró el token (sin mostrar el valor completo por seguridad)
+if (TOKEN) {
+    const tokenPreview = TOKEN.substring(0, 7) + "..." + TOKEN.substring(TOKEN.length - 4);
+    console.log(`✅ Token de GitHub configurado (${tokenPreview}). Accediendo a repositorios públicos y privados.`);
+} else {
+    console.warn("⚠️  GH_ALL_TOKEN/GH_READ_TOKEN no está configurado. Solo se pueden acceder a repositorios públicos.");
+    console.warn("   Para acceder a repositorios privados, configura la variable de entorno GH_ALL_TOKEN o GH_READ_TOKEN");
+    console.warn(`   Buscando .env en: ${envPath}`);
+    // Debug adicional: mostrar todas las variables de entorno que empiezan con GH
+    const ghVars = Object.keys(process.env).filter(key => key.startsWith("GH"));
+    if (ghVars.length > 0) {
+        console.warn(`   Variables de entorno encontradas que empiezan con GH: ${ghVars.join(", ")}`);
+    }
 }
 
 const octo = new Octokit({ auth: TOKEN });
@@ -218,11 +240,23 @@ async function main() {
     console.log("🔍 Buscando automáticamente todos los repositorios con carpeta .portfolio...");
 
     try {
-        const repos = await octo.request("GET /user/repos", {
-            per_page: 100,
-            sort: "updated",
-            affiliation: "owner" // Solo repos propios (incluye públicos y privados)
-        });
+        let repos;
+        if (TOKEN) {
+            // Con token: podemos acceder a repos privados
+            repos = await octo.request("GET /user/repos", {
+                per_page: 100,
+                sort: "updated",
+                affiliation: "owner" // Solo repos propios (incluye públicos y privados)
+            });
+        } else {
+            // Sin token: solo repos públicos del usuario
+            repos = await octo.request("GET /users/{username}/repos", {
+                username: OWNER,
+                per_page: 100,
+                sort: "updated",
+                type: "owner" // Solo repos propios
+            });
+        }
 
         // Filtrar los que contengan .portfolio
         for (const r of repos.data) {
