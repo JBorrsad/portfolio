@@ -39,6 +39,16 @@ jobs:
         env:
           GH_ALL_TOKEN: ${{ secrets.GH_ALL_TOKEN }}
 
+      - name: Verify icons were downloaded
+        run: |
+          if [ -d "public/icons" ] && [ "$(ls -A public/icons 2>/dev/null)" ]; then
+            echo "✅ Iconos descargados correctamente:"
+            ls -la public/icons/
+          else
+            echo "⚠️  No se encontraron iconos en public/icons/"
+            exit 1
+          fi
+
       - name: Build with Astro
         run: npm run build
 

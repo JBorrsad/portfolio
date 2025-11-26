@@ -1,10 +1,10 @@
 [
   {
-    "repo": "JBorrsad/portfolio",
-    "title": "Mi portfolio personal con sincronización automática",
-    "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados cronológicamente por commit.",
-    "website": "https://jborrsad.github.io/portfolio",
-    "coverImage": "https://jborrsad.github.io/portfolio/projects/portfolio.webp",
+    "repo": "JBorrsad/haion",
+    "title": "Haion Consulting - Sitio Web Corporativo con CMS",
+    "description": "Sitio web corporativo de asesoría empresarial con CMS estático SEO-friendly, panel de administración, autenticación segura con Supabase y deploy automático a GitHub Pages. Incluye gestión de contenido, transiciones de página fluidas y diseño responsive.",
+    "website": "https://haion-consulting.es",
+    "coverImage": "/projects/haion.png",
     "tags": [
       {
         "name": "ASTRO",
@@ -15,12 +15,17 @@
         "name": "TAILWIND",
         "slug": "tailwindcss",
         "iconPath": "/icons/tailwindcss.svg"
+      },
+      {
+        "name": "SUPABASE",
+        "slug": "supabase",
+        "iconPath": "/icons/supabase.svg"
       }
     ],
     "stars": 0,
-    "lastCommitDate": "2025-11-25T23:59:59Z",
-    "lastCommitDateFormatted": "26/11/2025 • 00:59",
-    "repoUrl": "https://github.com/JBorrsad/portfolio"
+    "lastCommitDate": "2025-11-26T01:36:35Z",
+    "lastCommitDateFormatted": "26/11/2025 • 02:36",
+    "repoUrl": "https://github.com/JBorrsad/haion"
   },
   {
     "repo": "JBorrsad/inmov",
@@ -51,16 +56,16 @@
       }
     ],
     "stars": 0,
-    "lastCommitDate": "2025-11-25T23:27:41Z",
-    "lastCommitDateFormatted": "26/11/2025 • 00:27",
+    "lastCommitDate": "2025-11-26T01:32:25Z",
+    "lastCommitDateFormatted": "26/11/2025 • 02:32",
     "repoUrl": "https://github.com/JBorrsad/inmov"
   },
   {
-    "repo": "JBorrsad/haion",
-    "title": "Haion Consulting - Sitio Web Corporativo con CMS",
-    "description": "Sitio web corporativo de asesoría empresarial con CMS estático SEO-friendly, panel de administración, autenticación segura con Supabase y deploy automático a GitHub Pages. Incluye gestión de contenido, transiciones de página fluidas y diseño responsive.",
-    "website": "https://haion-consulting.es",
-    "coverImage": "/projects/haion.png",
+    "repo": "JBorrsad/portfolio",
+    "title": "Mi portfolio personal con sincronización automática",
+    "description": "Portfolio personal con sistema de auto-sincronización que se actualiza automáticamente cada vez que se hace push en cualquier repositorio, mostrando todos los proyectos ordenados cronológicamente por commit.",
+    "website": "https://jborrsad.github.io/portfolio",
+    "coverImage": "https://jborrsad.github.io/portfolio/projects/portfolio.webp",
     "tags": [
       {
         "name": "ASTRO",
@@ -74,9 +79,9 @@
       }
     ],
     "stars": 0,
-    "lastCommitDate": "2025-11-25T23:22:07Z",
-    "lastCommitDateFormatted": "26/11/2025 • 00:22",
-    "repoUrl": "https://github.com/JBorrsad/haion"
+    "lastCommitDate": "2025-11-26T01:26:45Z",
+    "lastCommitDateFormatted": "26/11/2025 • 02:26",
+    "repoUrl": "https://github.com/JBorrsad/portfolio"
   },
   {
     "repo": "JBorrsad/clinica-sada-borras",

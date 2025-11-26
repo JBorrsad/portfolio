@@ -40,7 +40,7 @@ const ICON_ALIASES: Record<string, string> = {
 };
 
 // Verifica que el token esté configurado
-const TOKEN = process.env.GH_ALL_TOKEN || process.env.GH_READ_TOKEN || process.env.PORTFOLIO_READ_TOKEN || process.env.GH_TOKEN;
+const TOKEN = process.env.GH_ALL_TOKEN;
 
 // Debug: mostrar si se encontró el token (sin mostrar el valor completo por seguridad)
 if (TOKEN) {
@@ -153,6 +153,9 @@ async function ensureIconExists(tagName: string): Promise<string> {
 	const localPath = path.join(PUBLIC_ICONS_DIR, fileName);
 	const publicUrl = `/icons/${fileName}`;
 	
+	// Asegurarnos de que la carpeta existe
+	await fs.mkdir(PUBLIC_ICONS_DIR, { recursive: true });
+	
 	// Si ya existe, no lo descargamos de nuevo
 	try {
 		await fs.access(localPath);
@@ -163,28 +166,54 @@ async function ensureIconExists(tagName: string): Promise<string> {
 	
 	console.log(`   ⬇️  Descargando icono: ${tagName} (${slug})...`);
 	
-	try {
-		// Descargar EXCLUSIVAMENTE desde el CDN de Simple Icons
-		// El CDN ya devuelve el SVG con el color oficial de la marca aplicado
-		const res = await fetch(`https://cdn.simpleicons.org/${slug}`);
-		
-		if (res.ok) {
-			const svgContent = await res.text();
+	// Reintentos para la descarga
+	const maxRetries = 3;
+	for (let attempt = 1; attempt <= maxRetries; attempt++) {
+		try {
+			// Descargar EXCLUSIVAMENTE desde el CDN de Simple Icons
+			// El CDN ya devuelve el SVG con el color oficial de la marca aplicado
+			const res = await fetch(`https://cdn.simpleicons.org/${slug}`, {
+				headers: {
+					'User-Agent': 'Mozilla/5.0 (compatible; PortfolioBot/1.0)'
+				}
+			});
 			
-			// Verificar que el contenido sea SVG válido
-			if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
-				await fs.writeFile(localPath, svgContent, 'utf8');
-				console.log(`   ✅ Icono descargado: ${fileName}`);
-				return publicUrl;
+			if (res.ok) {
+				const svgContent = await res.text();
+				
+				// Verificar que el contenido sea SVG válido
+				if (svgContent.trim().startsWith('<svg') || svgContent.trim().startsWith('<?xml')) {
+					// Asegurarnos de que la carpeta existe antes de escribir
+					await fs.mkdir(PUBLIC_ICONS_DIR, { recursive: true });
+					await fs.writeFile(localPath, svgContent, 'utf8');
+					console.log(`   ✅ Icono descargado: ${fileName}`);
+					return publicUrl;
+				} else {
+					console.warn(`   ⚠️  Contenido no válido para "${tagName}" (slug: ${slug})`);
+				}
+			} else if (res.status === 404) {
+				// Si es 404, no tiene sentido reintentar
+				console.warn(`   ⚠️  No se encontró icono para "${tagName}" (slug: ${slug}) - 404`);
+				return "";
+			} else if (attempt < maxRetries) {
+				// Reintentar si no es 404
+				console.warn(`   ⚠️  Error ${res.status} descargando icono ${slug}, reintentando (${attempt}/${maxRetries})...`);
+				await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Esperar antes de reintentar
+				continue;
+			}
+		} catch (e) {
+			if (attempt < maxRetries) {
+				console.warn(`   ⚠️  Error descargando icono ${slug}, reintentando (${attempt}/${maxRetries})...`, e instanceof Error ? e.message : e);
+				await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Esperar antes de reintentar
+				continue;
+			} else {
+				console.error(`   ❌ Error descargando icono ${slug} después de ${maxRetries} intentos:`, e instanceof Error ? e.message : e);
+				return "";
 			}
 		}
-		
-		console.warn(`   ⚠️  No se encontró icono para "${tagName}" (slug: ${slug})`);
-		return ""; 
-	} catch (e) {
-		console.error(`   ❌ Error descargando icono ${slug}:`, e instanceof Error ? e.message : e);
-		return "";
 	}
+	
+	return "";
 }
 
 async function downloadImage(owner: string, repo: string, filePath: string, destPath: string, ref: string): Promise<boolean> {
